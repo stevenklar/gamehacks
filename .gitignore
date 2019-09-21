@@ -1,0 +1,5 @@
+# Ignore Directories
+build/
+.vs/
+
+# Ignore Files
