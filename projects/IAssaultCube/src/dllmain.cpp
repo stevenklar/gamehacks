@@ -1,18 +1,16 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 #include "dllmain.h"
+#include "Icetrix.h"
 
 using namespace blackbone;
 
 typedef BOOL(__stdcall* f_wglSwapBuffers)(HDC h);
 Detour<f_wglSwapBuffers> d_wglSwapBuffers;
 
-BOOL __stdcall h_wglSwapBuffers(HDC h)
+void Draw()
 {
-	SetupOrtho();
-
 	Game game;
-
 	playerent* pLocalPlayer = game.GetLocalPlayer();
 	playerent** entityList = game.GetEntityList();
 
@@ -21,14 +19,21 @@ BOOL __stdcall h_wglSwapBuffers(HDC h)
 		playerent* pPlayer = entityList[i];
 		DrawESP(pPlayer, pLocalPlayer);
 	}
+}
 
+BOOL __stdcall h_wglSwapBuffers(HDC h)
+{
+	SetupOrtho();
+	Draw();
 	RestoreGL();
 	return d_wglSwapBuffers.CallOriginal(std::move(h));
 }
 
-DWORD WINAPI DllThread(LPVOID lpParameter)
+void Run()
 {
+	Console console;
 	Process ac; 
+
 	if (NT_SUCCESS(ac.Attach(GetCurrentProcessId())))
 	{
 		auto& core = ac.core();
@@ -75,21 +80,4 @@ DWORD WINAPI DllThread(LPVOID lpParameter)
 	}
 
 	FreeConsole();
-	return 0;
-}
-
-Console console;
-BOOL WINAPI DllMain(_In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved)
-{
-    if (fdwReason == DLL_PROCESS_ATTACH)
-    {
-		CreateThread(0, 0, DllThread, 0, 0, 0);
-	}
-	
-	if (fdwReason == DLL_PROCESS_DETACH)
-	{
-		FreeLibraryAndExitThread(hinstDLL, 0);
-	}
-	
-	return TRUE;
 }
