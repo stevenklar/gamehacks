@@ -69,6 +69,13 @@ project "IAssaultCube"
     includeBlackbone()
     includeIcetrix();
 
+project "PAssaultCube" -- Loader for IAssaultCube
+    kind "ConsoleApp"
+
+    files {
+        "projects/%{prj.name}/src/**",
+    }
+
 project "EAssaultCube"
     kind "WindowedApp"
 
