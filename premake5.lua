@@ -41,13 +41,40 @@ function includeBlackbone()
     links "Blackbone"
 end
 
+-- Framework
+project "Icetrix"
+    kind "StaticLib"
+
+    files {
+        "projects/%{prj.name}/src/**",
+    }
+
+    function includeIcetrix()
+        -- compiler
+        includedirs "projects/Icetrix/src"
+        -- linker (include lib file and link it)
+        --libdirs "build/%{prj.name}Blackbone/build/Win32/Debug"
+        links "Icetrix"
+    end
+
 -- Projects
 project "IAssaultCube"
     kind "SharedLib"
 
     files {
-        "projects/IAssaultCube/src/**",
+        "projects/%{prj.name}/src/**",
     }
 
     includeDirectX()
     includeBlackbone()
+    includeIcetrix();
+
+project "EAssaultCube"
+    kind "WindowedApp"
+
+    files {
+        "projects/%{prj.name}/src/**",
+    }
+
+    includeDirectX()
+    includeIcetrix();

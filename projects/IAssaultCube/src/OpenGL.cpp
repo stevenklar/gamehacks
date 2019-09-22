@@ -1,6 +1,26 @@
 #include "pch.h"
 #include "OpenGL.h"
-#include "Game.h"
+
+float Get3dDistance(Vector3 myCoords, Vector3 enemyCoords)
+{
+	return static_cast<float>(
+		sqrt(
+			pow(float(enemyCoords.x - myCoords.x), 2.0) +
+			pow(float(enemyCoords.y - myCoords.y), 2.0) +
+			pow(float(enemyCoords.z - myCoords.z), 2.0)
+		)
+	);
+}
+
+void GetResolution(int &height, int &width)
+{
+	RECT rWindow;
+	HWND fWindow = GetForegroundWindow();
+	GetWindowRect(fWindow, &rWindow);
+	
+	height = rWindow.right;
+	width = rWindow.bottom;
+}
 
 bool OpenGL::WorldToScreen(Vec3 vPos, Vec3* pvOut)
 {
@@ -28,31 +48,6 @@ bool OpenGL::WorldToScreen(Vec3 vPos, Vec3* pvOut)
 	return true;
 }
 
-bool OpenGL::OutdatedWorldToScreen(float* matrix, Vector3 worldPosition, Vector3& screenPosition)
-{
-	// transform viewport to screen
-	auto *pScreenSettings = ScreenSettings::GetInstance();
-	float w = (float)pScreenSettings->m_Width / 2.0f;
-	float h = (float)pScreenSettings->m_Height / 2.0f;
-
-	// calculate clip coords
-	Vector4 clipCoords = { 0, 0, 0, 0 };
-	clipCoords.x = worldPosition.x * matrix[0] + worldPosition.y * matrix[4] + worldPosition.z * matrix[8] + matrix[12];
-	clipCoords.y = worldPosition.x * matrix[1] + worldPosition.y * matrix[5] + worldPosition.z * matrix[9] + matrix[13];
-	clipCoords.z = worldPosition.x * matrix[2] + worldPosition.y * matrix[6] + worldPosition.z * matrix[10] + matrix[14];
-	clipCoords.w = worldPosition.x * matrix[3] + worldPosition.y * matrix[7] + worldPosition.z * matrix[11] + matrix[15];
-	
-	// worldPosition should'nt be behind otherwise it would be rendered twice like a mirror
-	if (clipCoords.w < 0.01f)
-		return false;
-
-	// perspective divison = divide clip.W = normalizedDeviceCoordinates
-	screenPosition.x = w + (w * clipCoords.x / clipCoords.w);
-	screenPosition.y = h - (h * clipCoords.y / clipCoords.w);
-	screenPosition.z = clipCoords.w;
-
-	return true;
-}
 
 void OpenGL::DrawBox(float x, float y, RGB color, float width, float height)
 {
@@ -170,5 +165,26 @@ float OpenGL::GetDistance(Vector3 myCoords, Vector3 enemyCoords)
 		powf(enemyCoords.y - myCoords.y, 2.0) +
 		powf(enemyCoords.z - myCoords.z, 2.0)
 	);
+}
+
+void SetupOrtho()
+{
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glPushMatrix();
+	GLint viewport[4];
+	glGetIntegerv(GL_VIEWPORT, viewport);
+	glViewport(0, 0, viewport[2], viewport[3]);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, viewport[2], viewport[3], 0, -1, 1);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glDisable(GL_DEPTH_TEST);
+}
+
+void RestoreGL()
+{
+	glPopMatrix();
+	glPopAttrib();
 }
 

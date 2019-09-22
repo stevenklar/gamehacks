@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "Game.h"
 
 bool IsValidPtr(void* pPointer)
@@ -28,4 +29,20 @@ bool IsVisible(Vec3 vFrom, Vec3 vTo)
 		call ebx;
 		add esp, 0x18;
 	}
+}
+
+playerent* Game::GetLocalPlayer()
+{
+	return *(playerent**)(m_LocalPlayer);
+}
+
+playerent** Game::GetEntityList()
+{
+	EntityList *pEntityList = *reinterpret_cast<EntityList**>(m_EntityList);
+	return pEntityList->entities;
+}
+
+int Game::GetNumberOfPlayers()
+{
+	return *(int*)m_NumOfPlayers;
 }

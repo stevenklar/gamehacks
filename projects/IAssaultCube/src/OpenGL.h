@@ -1,12 +1,21 @@
 #pragma once
+#pragma comment(lib,"OpenGL32.lib")
 
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include <d3dx9.h>
+#include "Game.h"
 
 struct RGB
 {
 	GLfloat red = 0.f, green = 0.f, blue = 0.f, alpha = 1.f;
 };
+
+void SetupOrtho();
+void RestoreGL();
+
+float Get3dDistance(Vector3 myCoords, Vector3 enemyCoords);
+void GetResolution(int& height, int& width);
 
 namespace RenderFunctions
 {
@@ -27,7 +36,6 @@ namespace RenderFunctions
 	};
 }
 
-
 namespace OpenGL
 {
 	void DrawBox(float x, float y, RGB color, float width, float height);
@@ -37,7 +45,6 @@ namespace OpenGL
 	void DrawHealthBar(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLfloat health, RenderFunctions::Color32 color);
 	void DrawString(int x, int y, int r, int g, int b, char* pText, ...);
 	bool WorldToScreen(Vec3 vPos, Vec3* pvOut);
-	bool OutdatedWorldToScreen(float* matrix, Vector3 worldPosition, Vector3& screenPosition);
 	float GetDistance(Vector3 myCoords, Vector3 enemyCoords);
 };
 
