@@ -1,5 +1,6 @@
 # Ignore Directories
 build/
 .vs/
+.vscode/
 
 # Ignore Files

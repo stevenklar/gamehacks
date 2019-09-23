@@ -23,8 +23,8 @@ workspace "GameHacks"
 
     filter {}
 
-	flags {
-		"MultiProcessorCompile"
+    flags {
+        "MultiProcessorCompile"
     }
 
 -- Helper
@@ -53,7 +53,6 @@ project "Icetrix"
         -- compiler
         includedirs "projects/Icetrix/src"
         -- linker (include lib file and link it)
-        --libdirs "build/%{prj.name}Blackbone/build/Win32/Debug"
         links "Icetrix"
     end
 
