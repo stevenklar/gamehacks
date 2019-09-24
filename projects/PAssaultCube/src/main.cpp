@@ -9,7 +9,7 @@ int main()
 {
     HRESULT hrReturnVal;
 
-    auto hDLL = LoadLibrary("GH Injector - x86");
+    auto hDLL = LoadLibrary(L"GH Injector - x86");
 
     if (NULL != hDLL)
     {
@@ -18,7 +18,7 @@ int main()
         if (NULL != pInjectW)
         {
             //int result = injectW("ac_client.exe");
-            hrReturnVal = pInjectW((DWORD*)0x40000);
+            //hrReturnVal = pInjectW((DWORD*)0x40000);
         }
         else
         {

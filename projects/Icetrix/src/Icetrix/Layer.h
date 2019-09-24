@@ -5,15 +5,14 @@ namespace Icetrix
     class Layer
     {
     public:
-        Layer();
-        ~Layer();
-
         virtual bool OnAttach()
         {
+			return true;
         }
 
         virtual bool OnUpdate()
         {
+			return true;
         }
 
         virtual void OnDetach()

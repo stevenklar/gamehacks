@@ -3,6 +3,23 @@
 #include <vector>
 #include "Layer.h"
 
+class ImGui : public Icetrix::Layer
+{
+	bool OnAttach()
+	{
+		return true;
+	}
+
+	bool OnUpdate()
+	{
+		return true;
+	}
+
+	void OnDetach()
+	{
+	}
+};
+
 namespace Icetrix
 {
     class Application
@@ -10,13 +27,14 @@ namespace Icetrix
     private:
         std::vector<Icetrix::Layer*> layers;
         bool panic = false;
-    private:
-        Application();
-        ~Application();
     public:
-        virtual Application* Create();
-
+		Application()
+		{
+			PushLayer(new ImGui);
+		}
         void Run();
-        void PushLayer(Layer* layer)
+		void PushLayer(Layer* layer);
     };
+
+	Icetrix::Application* CreateApplication();
 }

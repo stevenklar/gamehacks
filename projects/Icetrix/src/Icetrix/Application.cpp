@@ -11,7 +11,7 @@ void Icetrix::Application::Run()
             if (!layer->OnUpdate())
                 panic = true;
 
-    for (Layer* layer : layers.rbegin)
+    for (Layer* layer : layers)
         layer->OnDetach();
 }
 

@@ -62,8 +62,16 @@ project "IAssaultCube"
 
     files {
         "projects/%{prj.name}/src/**",
+        "projects/%{prj.name}/vendor/imgui/**.h",
+        "projects/%{prj.name}/vendor/imgui/**.cpp",
     }
 
+    -- include own path to use project relative includes
+    includedirs "projects/%{prj.name}/src"
+    includedirs "projects/%{prj.name}/vendor/imgui"
+    includedirs "projects/%{prj.name}/vendor/imgui/misc/sdl/include"
+    libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl/lib/x86"
+    links "SDL"
     includeDirectX()
     includeBlackbone()
     includeIcetrix();

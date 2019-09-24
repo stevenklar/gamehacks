@@ -4,7 +4,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include <d3dx9.h>
-#include "Game.h"
+#include "Game/Game.h"
 
 struct RGB
 {

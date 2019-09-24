@@ -2,32 +2,27 @@
 
 #include "Icetrix/Console.h"
 #include "Icetrix/Layer.h"
-
+#include "Game/Game.h"
 #include "BlackBone/Process/Process.h"
 #include "BlackBone/LocalHook/LocalHook.hpp"
-
-#include "OpenGL.h"
-#include "Game.h"
-#include "ESP.h"
-#include "Console.h"
-
+#include "Icetrix/Console.h"
+#include "Platform/OpenGL/OpenGL.h"
+#include <SDL.h>
 
 typedef BOOL(__stdcall* f_wglSwapBuffers)(HDC h);
+typedef int(__cdecl* f_pollEvent)(SDL_Event* e);
 
 class Visuals : public Icetrix::Layer
 {
 private:
 	blackbone::Process process;
 	Icetrix::Console console;
-	blackbone::Detour<f_wglSwapBuffers> d_wglSwapBuffers;
-
 public:
-	BOOL __stdcall h_wglSwapBuffers(HDC h);
 
 	bool OnAttach();
 	bool OnUpdate();
-	bool OnDetach();
+	void OnDetach();
 
-	void Draw();
-	void ESP(playerent* pTargetPlayer, playerent* pLocalPlayer);
+	static void Draw();
+	static void ESP(playerent* pTargetPlayer, playerent* pLocalPlayer);
 };

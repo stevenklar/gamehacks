@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "Icetrix.h"
 #include "Layer/Visuals.h"
+#include "Layer/Aimbot.h"
+#include "Icetrix/Application.h"
 
 class AssaultCubeInternal : public Icetrix::Application
 {
