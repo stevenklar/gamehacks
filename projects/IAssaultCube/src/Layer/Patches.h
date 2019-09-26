@@ -1,0 +1,44 @@
+#pragma once
+
+#include <windows.h>
+#include <cstdint>
+#include <tlhelp32.h>
+#include <Psapi.h>
+#include <iostream>
+#include "Icetrix/Layer.h"
+#include "BlackBone/Include/Types.h"
+
+#define MAX_PATCH 7
+
+struct GamePatch
+{
+	char const* name;
+	blackbone::module_t address;
+	BYTE original[MAX_PATCH];
+	BYTE patch[MAX_PATCH];
+	int size;
+};
+
+class Patches : public Icetrix::Layer
+{
+public:
+	bool OnAttach() override;
+	bool OnUpdate() override;
+	void OnDetach() override;
+
+private:
+	void Patch(GamePatch patch, blackbone::module_t baseAddress = 0);
+	void Unpatch(GamePatch patch, blackbone::module_t baseAddress = 0);
+
+private:
+	std::vector<GamePatch>(patches) = {
+		GamePatch{ "Unlimited Ammo",			0x637e9, { 0xFF, 0x0E }, { 0x90, 0x90 }, 2 },
+		GamePatch{"Unlimited Grenades",			0x63378, { 0xFF, 0x08 }, { 0x90, 0x90 }, 2 },
+		GamePatch{"Rapidfire",					0x637e4, { 0x89, 0x0A }, { 0x90, 0x90 }, 2 },
+		GamePatch{"NoRecoil1",					0x6226D, { 0x0F, 0xBF, 0x87, 0x20, 0x01, 0x00, 0x00 }, { 0x31, 0xC0, 0x90, 0x90, 0x90, 0x90, 0x90 }, 7 },
+		GamePatch{"NoRecoil2",					0x62274, { 0x0F, 0xBF, 0x8F, 0x22, 0x01, 0x00, 0x00 }, { 0x31, 0xC9, 0x90, 0x90, 0x90, 0x90, 0x90 }, 7 },
+		GamePatch{"NoRecoil3_Kickback_primary", 0x63dd5, { 0x0F, 0xBF, 0x88, 0x16, 0x01, 0x00, 0x00 }, { 0x31, 0xc9, 0x90, 0x90, 0x90, 0x90, 0x90 }, 7 },
+		GamePatch{"NoRecoil3_Kickback2_subgun", 0x625a4, { 0x0F, 0xBF, 0x88, 0x16, 0x01, 0x00, 0x00 }, { 0x31, 0xc9, 0x90, 0x90, 0x90, 0x90, 0x90 }, 7 },
+	};
+};
+

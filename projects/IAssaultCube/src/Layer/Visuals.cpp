@@ -1,10 +1,10 @@
 #include "pch.h"
 #include "Visuals.h"
 #include "BlackBone/LocalHook/LocalHook.hpp"
+#include "Icetrix/Process.h"
 
 #pragma comment(lib, "opengl32.lib")
 
-blackbone::Detour<f_wglSwapBuffers> d_wglSwapBuffers;
 void __stdcall h_wglSwapBuffers(HDC& h)
 {
 	SetupOrtho();
@@ -33,7 +33,7 @@ void Visuals::OnDetach()
 {
 	if (d_wglSwapBuffers.Restore())
 	{
-		std::cout << "[+] Restored wglSwapBuffers" << std::endl;
+		std::cout << "[+] Restored 'wglSwapBuffers'" << std::endl;
 	}
 	else
 	{
@@ -43,7 +43,6 @@ void Visuals::OnDetach()
 
 bool Visuals::HookSwapBuffers()
 {
-	std::cout << "[+] Search for for opengl32.dll::wglSwapBuffers" << std::endl;
 	HMODULE hOpenglModule = GetModuleHandle("opengl32.dll");
 
 	if (hOpenglModule == NULL)
@@ -53,18 +52,15 @@ bool Visuals::HookSwapBuffers()
 	}
 
 	auto dWglSwapBuffers = GetProcAddress(hOpenglModule, "wglSwapBuffers");
-
-	std::cout << "[+] Map wglSwapBuffers " << std::endl;
 	f_wglSwapBuffers wglSwapBuffers = reinterpret_cast<f_wglSwapBuffers>(dWglSwapBuffers);
 
-	std::cout << "[+] Hook wglSwapBuffers" << std::endl;
 	if (d_wglSwapBuffers.Hook(wglSwapBuffers, &h_wglSwapBuffers, blackbone::HookType::HWBP))
 	{
-		std::cout << "[+] Inline hooked wglSwapBuffers\n";
+		std::cout << "[+] Hooked 'wglSwapBuffers'" << std::endl;
 	}
 	else
 	{
-		std::cout << "[!] Failed to Hook: wglSwapBuffers\n";
+		std::cout << "[!] Failed to Hook: wglSwapBuffers" << std::endl;
 		return false;
 	}
 

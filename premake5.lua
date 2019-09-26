@@ -45,6 +45,7 @@ end
 -- Framework
 project "Icetrix"
     kind "StaticLib"
+    characterset "MBCS"
 
     files {
         "projects/%{prj.name}/src/**",
@@ -52,6 +53,7 @@ project "Icetrix"
 
     includedirs "projects/%{prj.name}/src"
     includeDirectX()
+    includeBlackbone();
 
     function includeIcetrix()
         -- compiler
