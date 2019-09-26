@@ -1,35 +1,63 @@
 #include <iostream>
 #include <Windows.h>
+#include "BlackBone/Process/Process.h"
+#include <3rd_party/VersionApi.h>
+#include <filesystem>
 
-// D:\Tools\GH Injector V3.3\GH Injector - x64.dll
-//    79DB1E80    InjectW     dll + 1E80
-typedef __int64(__stdcall* InjectW)(DWORD* lpBuffer);
+#define LOG(x) std::cout << "[+] " << x << std::endl
+#define LOGE(x) std::cout << "[!] " << x << std::endl
+#define LOGEW(x) std::wcout << "[!] " << x << std::endl
 
 int main()
 {
-    HRESULT hrReturnVal;
+	LOG("Wait until ac_client.exe is available");
+	auto pids = blackbone::Process::EnumByName(L"ac_client.exe");
+	while (pids.size() != 1)
+	{
+		pids = blackbone::Process::EnumByName(L"ac_client.exe");
+		if (GetAsyncKeyState(VK_F9) & 1)
+		{
+			LOG("Stopped");
+			return 0;
+		}
 
-    auto hDLL = LoadLibrary(L"GH Injector - x86");
+		Sleep(500);
+	}
 
-    if (NULL != hDLL)
-    {
-        //InjectW pInjectW = (InjectW)(0x79DB1E80);
-        InjectW pInjectW = (InjectW)GetProcAddress(hDLL, "InjectW");
-        if (NULL != pInjectW)
-        {
-            //int result = injectW("ac_client.exe");
-            //hrReturnVal = pInjectW((DWORD*)0x40000);
-        }
-        else
-        {
-            hrReturnVal = ERROR_DELAY_LOAD_FAILED;
-        }
-        FreeLibrary(hDLL);
-    }
-    else
-    {
-        hrReturnVal = ERROR_DELAY_LOAD_FAILED;
-    }
+	LOG("PID:" << pids.front());
 
-    std::cout << hrReturnVal << std::endl;
+	blackbone::Process process;
+	if (!NT_SUCCESS(process.Attach(pids.front())))
+	{
+		LOGE("Could not attach to process");
+		return 0;
+	}
+
+	//auto dll = L"../../../IAssaultCube//Debug//Win32//IAssaultCube.dll";
+	//auto dll = L"C://Users//nop//source//repos//GameHacks//build//bin//IAssaultCube//Debug//Win32//IAssaultCube.dll";
+	char path[MAX_PATH];
+	GetCurrentDirectoryA(MAX_PATH, path);
+
+	std::filesystem::path cwd = std::filesystem::current_path() / "./IAssaultCube.dll";
+	const char* dll = "./IAssaultCube.dll";
+	auto& modules = process.modules();
+	auto& modData = modules.Inject(cwd);
+
+	if (!modData)
+	{
+		LOGE("Could not inject into process");
+		/*
+		LOG("Unload existing hack and try again");
+		modules.Unlink(*modData);
+		modules.Unload(*modData);
+		*/
+	}
+	else
+	{
+		LOG("Successfully injected dll");
+	}
+
+	process.Detach();
+
+	return 0;
 }

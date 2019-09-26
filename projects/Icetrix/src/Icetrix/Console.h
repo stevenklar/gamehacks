@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <windows.h>
+
 namespace Icetrix
 {
 	class Console
@@ -14,6 +16,9 @@ namespace Icetrix
 
 		~Console()
 		{
+			fclose((FILE*)stdout);
+			HWND hwndConsole = GetConsoleWindow();
+			PostMessageW(hwndConsole, WM_CLOSE, 0, 0);
 			FreeConsole();
 		}
 	};

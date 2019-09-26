@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include "Application.h"
+#include <thread>
 
 DWORD WINAPI DllThread(LPVOID lpParameter)
 {

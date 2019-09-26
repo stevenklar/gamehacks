@@ -28,10 +28,6 @@ namespace Icetrix
         std::vector<Icetrix::Layer*> layers;
         bool panic = false;
     public:
-		Application()
-		{
-			PushLayer(new ImGui);
-		}
         void Run();
 		void PushLayer(Layer* layer);
     };

@@ -1,8 +1,11 @@
 #include "Application.h"
 #include "Layer.h"
+#include "Console.h"
 
 void Icetrix::Application::Run()
 {
+	Console* console = new Console;
+
     for (Layer* layer : layers)
         layer->OnAttach();
     
@@ -13,6 +16,8 @@ void Icetrix::Application::Run()
 
     for (Layer* layer : layers)
         layer->OnDetach();
+
+	delete console;
 }
 
 void Icetrix::Application::PushLayer(Layer* layer)

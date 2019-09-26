@@ -6,6 +6,7 @@ workspace "GameHacks"
     location ("build/gen")
     targetdir("build/bin/%{prj.name}/%{cfg.longname}")
     objdir   ("build/obj/%{prj.name}/%{cfg.longname}")
+    defines { "_CRT_SECURE_NO_WARNINGS" }
 
     platforms      "Win32"
     architecture   "x86"
@@ -59,6 +60,7 @@ project "Icetrix"
 -- Projects
 project "IAssaultCube"
     kind "SharedLib"
+    characterset "MBCS"
 
     files {
         "projects/%{prj.name}/src/**",
@@ -66,12 +68,13 @@ project "IAssaultCube"
         "projects/%{prj.name}/vendor/imgui/**.cpp",
     }
 
+    links "dwmapi"
     -- include own path to use project relative includes
     includedirs "projects/%{prj.name}/src"
-    includedirs "projects/%{prj.name}/vendor/imgui"
-    includedirs "projects/%{prj.name}/vendor/imgui/misc/sdl/include"
-    libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl/lib/x86"
-    links "SDL"
+    includedirs "projects/%{prj.name}/vendor"
+    --includedirs "projects/%{prj.name}/vendor/imgui/misc/sdl/include"
+    --libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl/lib/x86"
+    --links "SDL"
     includeDirectX()
     includeBlackbone()
     includeIcetrix();
@@ -83,6 +86,9 @@ project "PAssaultCube" -- Loader for IAssaultCube
         "projects/%{prj.name}/src/**",
     }
 
+    includeBlackbone()
+
+--[[
 project "EAssaultCube"
     kind "WindowedApp"
 
@@ -92,3 +98,4 @@ project "EAssaultCube"
 
     includeDirectX()
     includeIcetrix();
+]]

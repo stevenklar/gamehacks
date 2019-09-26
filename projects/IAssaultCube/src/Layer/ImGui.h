@@ -1,10 +1,10 @@
 #pragma once
-#include "Layer.h"
+#include "Icetrix/Layer.h"
 #include <Windows.h>
 
 namespace Icetrix
 {
-    class ImGui : public Layer
+    class ImGui : public Icetrix::Layer
     {
     private:
         int windowstate = 1;
@@ -13,9 +13,9 @@ namespace Icetrix
         HWND hwnd;
     
     private:
-        HWND CreateWindow();
+        HWND CreateOverlay();
         void DispatchIncomingMessages(LPMSG msg);
-        void ChangeClickability(bool canclick, HWND ownd);
+        void ChangeClickability(HWND hwnd);
         void Render();
         void Draw();
 
