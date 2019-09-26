@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Icetrix/Layer.h"
+#include "Icetrix/Platform/OpenGL/OpenGL.h"
 #include "Game/Game.h"
-#include "Platform/OpenGL/OpenGL.h"
 
 typedef void(__stdcall* f_wglSwapBuffers)(HDC h);
 

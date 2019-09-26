@@ -3,8 +3,7 @@
 
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#include <d3dx9.h>
-#include "Game/Game.h"
+#include "Icetrix/Numerics.h"
 
 struct RGB
 {
@@ -44,7 +43,7 @@ namespace OpenGL
 	void DrawRect(int x, int y, int x2, int y2, RenderFunctions::Color32 color, bool bFilled);
 	void DrawHealthBar(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLfloat health, RenderFunctions::Color32 color);
 	void DrawString(int x, int y, int r, int g, int b, char* pText, ...);
-	bool WorldToScreen(Vec3 vPos, Vec3* pvOut);
+	bool WorldToScreen(Vec3 vPos, Vec3* pvOut, int width, int height);
 	float GetDistance(Vector3 myCoords, Vector3 enemyCoords);
 };
 

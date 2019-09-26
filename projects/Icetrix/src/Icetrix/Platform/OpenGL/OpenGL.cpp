@@ -22,16 +22,12 @@ void GetResolution(int &height, int &width)
 	width = rWindow.bottom;
 }
 
-bool OpenGL::WorldToScreen(Vec3 vPos, Vec3* pvOut)
+bool OpenGL::WorldToScreen(Vec3 vPos, Vec3* pvOut, int width, int height)
 {
-	ScreenSettings* pScreenSettings = ScreenSettings::GetInstance();
-	if (!IsValidPtr(pScreenSettings))
-		return false;
-
 	glmatrixf* mvpmatrix = reinterpret_cast<glmatrixf*>(0x501AE8);
 
-	float mX = (float)pScreenSettings->m_Width / 2.0F;
-	float mY = (float)pScreenSettings->m_Height / 2.0F;
+	float mX = (float)width / 2.0F;
+	float mY = (float)height / 2.0F;
 
 	float x = mvpmatrix->transformx(vPos);
 	float y = mvpmatrix->transformy(vPos);

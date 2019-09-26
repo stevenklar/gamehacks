@@ -1,4 +1,3 @@
-#define WINDOWS_IGNORE_PACKING_MISMATCH
 #include "pch.h"
 #include "Visuals.h"
 #include "BlackBone/LocalHook/LocalHook.hpp"
@@ -104,7 +103,12 @@ void Visuals::ESP(playerent* pTargetPlayer, playerent* pLocalPlayer)
 	vHeadPos.z += 0.8F; //Regular head pos is not high enough
 
 	Vec3 vScreenHead, vScreenFoot;
-	if (OpenGL::WorldToScreen(vHeadPos, &vScreenHead) && OpenGL::WorldToScreen(vFootPos, &vScreenFoot))
+	ScreenSettings* pScreenSettings = ScreenSettings::GetInstance();
+	if (!IsValidPtr(pScreenSettings))
+		return;
+
+	if (OpenGL::WorldToScreen(vHeadPos, &vScreenHead, pScreenSettings->m_Width, pScreenSettings->m_Height)
+		&& OpenGL::WorldToScreen(vFootPos, &vScreenFoot, pScreenSettings->m_Width, pScreenSettings->m_Height))
 	{
 		GLfloat flHeight = abs(vScreenFoot.y - vScreenHead.y);
 		GLfloat flWidth = flHeight / 2.0F;
