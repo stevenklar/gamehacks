@@ -49,7 +49,7 @@ public:
 	char pad_017C[36]; //0x017C
 	int32_t bulletsShot; //0x01A0
 	char pad_01A4[129]; //0x01A4
-	char name[17]; //0x0225
+	char m_Name[17]; //0x0225
 
 public:
 	void godmode()
@@ -110,3 +110,5 @@ public:
 
 bool IsValidPtr(void* pPointer);
 bool IsVisible(Vec3 vFrom, Vec3 vTo);
+void EngineDrawString(char* pText, int x, int y, int r, int g, int b, int pUnknown, int pUnknown2);
+void DrawString(int x, int y, int r, int g, int b, char* pText, ...);

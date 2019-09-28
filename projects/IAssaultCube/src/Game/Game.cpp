@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Game.h"
+#include <gl\GL.h>
 
 bool IsValidPtr(void* pPointer)
 {
@@ -29,6 +30,41 @@ bool IsVisible(Vec3 vFrom, Vec3 vTo)
 		call ebx;
 		add esp, 0x18;
 	}
+}
+
+void EngineDrawString(char* pText, int x, int y, int r, int g, int b, int pUnknown, int pUnknown2)
+{
+	__asm
+	{
+		push pUnknown2;
+		push pUnknown;
+		push b;
+		push r;
+		push y;
+		push x;
+		push pText;
+		mov eax, g;
+		mov ecx, 0x41A150; // OFFSET_ENGINE_DRAWTEXT
+		call ecx;
+		add esp, 0x1C;
+	}
+}
+
+void DrawString(int x, int y, int r, int g, int b, char* pText, ...)
+{
+	va_list va_alist;
+
+	char buf[256];
+
+	va_start(va_alist, pText);
+	_vsnprintf_s(buf, sizeof(buf), pText, va_alist);
+	va_end(va_alist);
+
+	float extraScale = 0.3F;
+
+	glScalef(extraScale, extraScale, 1);
+	EngineDrawString(buf, x / extraScale, y / extraScale, r, g, b, -1, -1);
+	glScalef(1 / extraScale, 1 / extraScale, 1);
 }
 
 playerent* Game::GetLocalPlayer()

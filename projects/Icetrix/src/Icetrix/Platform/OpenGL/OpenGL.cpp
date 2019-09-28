@@ -135,25 +135,6 @@ void OpenGL::DrawHealthBar(GLfloat x, GLfloat y, GLfloat w, GLfloat h, GLfloat h
 	OpenGL::DrawRect(x + 1, y + 1, x + (w * health) - 1, y + h - 1, color, true);
 }
 
-void OpenGL::DrawString(int x, int y, int r, int g, int b, char* pText, ...)
-{
-	va_list va_alist;
-
-	char buf[256];
-
-	va_start(va_alist, pText);
-	_vsnprintf_s(buf, sizeof(buf), pText, va_alist);
-	va_end(va_alist);
-
-	float extraScale = 0.3F;
-
-	glScalef(extraScale, extraScale, 1);
-
-	//EngineDrawString(buf, x / extraScale, y / extraScale, r, g, b);
-
-	glScalef(1 / extraScale, 1 / extraScale, 1);
-}
-
 float OpenGL::GetDistance(Vector3 myCoords, Vector3 enemyCoords)
 {
 	return sqrt(

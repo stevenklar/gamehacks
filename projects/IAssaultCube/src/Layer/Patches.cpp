@@ -24,16 +24,6 @@ bool Patches::OnAttach()
 	return true;
 }
 
-bool Patches::OnUpdate()
-{
-	// godmode
-	Game game;
-	game.GetLocalPlayer()->m_Health = 133337;
-	game.GetLocalPlayer()->m_Vest = 133337;
-
-	return true;
-}
-
 void Patches::OnDetach()
 {
 	blackbone::Process* process = Icetrix::Process::GetIntance();
