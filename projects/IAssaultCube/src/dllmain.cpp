@@ -12,9 +12,9 @@ class AssaultCubeInternal : public Icetrix::Application
 public:
 	AssaultCubeInternal()
 	{
+		PushLayer(new Menu());
 		PushLayer(new Visuals());
 		PushLayer(new Patches());
-		// PushLayer(new Menu());
 		// PushLayer(new Aimbot());
 	}
 };

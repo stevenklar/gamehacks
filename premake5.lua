@@ -73,17 +73,23 @@ project "IAssaultCube"
 
     files {
         "projects/%{prj.name}/src/**",
-        --"projects/%{prj.name}/vendor/imgui/**.h",
-        --"projects/%{prj.name}/vendor/imgui/**.cpp",
     }
+
+    -- imgui
+    files {
+        "projects/%{prj.name}/vendor/imgui/**.h",
+        "projects/%{prj.name}/vendor/imgui/**.cpp",
+    }
+    -- vendors
+    includedirs "projects/%{prj.name}/vendor"
 
     --links "dwmapi"
     -- include own path to use project relative includes
     includedirs "projects/%{prj.name}/src"
     --includedirs "projects/%{prj.name}/vendor"
-    --includedirs "projects/%{prj.name}/vendor/imgui/misc/sdl/include"
-    --libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl/lib/x86"
-    --links "SDL2"
+    includedirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/include"
+    libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/lib/x86"
+    links "SDL"
     includeBlackbone()
     includeIcetrix();
 
