@@ -244,7 +244,7 @@ void Visuals::ESP(playerent* pTargetPlayer, playerent* pLocalPlayer)
 		GLfloat flHeight = abs(vScreenFoot.y - vScreenHead.y);
 		GLfloat flWidth = flHeight / 2.0F;
 
-		RenderFunctions::Color32 color = IsVisible(pLocalPlayer->m_Head, pTargetPlayer->m_Head) ? RenderFunctions::Color32(1.0F, 1.0F, 0.0F, 1.0F) : RenderFunctions::Color32(1.0F, 0.0F, 0.0F, 1.0F);
+		auto color = pLocalPlayer->GetPlayerColor(pTargetPlayer);
 
 		OpenGL::DrawRect((int)(vScreenHead.x - flWidth / 2), (int)vScreenHead.y, (int)(vScreenHead.x + flWidth / 2), (int)(vScreenHead.y + flHeight), color, false);
 		OpenGL::DrawHealthBar(vScreenHead.x - flWidth / 2, vScreenHead.y - 14, flWidth, 6.0F, static_cast <float>(static_cast <float>(pTargetPlayer->m_Health) / 100.0F), RenderFunctions::Color32(0.0F, 1.0F, 0.0F, 1.0F));

@@ -3,6 +3,12 @@
 #include <cstdint>
 #include "Windows.h"
 #include "Icetrix/Numerics.h"
+#include "Icetrix/Platform/OpenGL/OpenGL.h"
+
+bool IsValidPtr(void* pPointer);
+bool IsVisible(Vec3 vFrom, Vec3 vTo);
+void EngineDrawString(char* pText, int x, int y, int r, int g, int b, int pUnknown, int pUnknown2);
+void DrawString(int x, int y, int r, int g, int b, char* pText, ...);
 
 class playerentPtr
 {
@@ -50,6 +56,8 @@ public:
 	int32_t bulletsShot; //0x01A0
 	char pad_01A4[129]; //0x01A4
 	char m_Name[17]; //0x0225
+	char pad_0236[246]; //0x0236
+	int32_t m_Team; //0x032c
 
 public:
 	void godmode()
@@ -60,6 +68,16 @@ public:
 		this->m_AmmoMags = 1337;
 		this->m_Flashbangs = 1337;
 		this->m_SecAmmo = 1337;
+	}
+
+	RenderFunctions::Color32 GetPlayerColor(playerent* pTargetPlayer)
+	{
+		if (pTargetPlayer->m_Team == this->m_Team)
+		{
+			return RenderFunctions::Color32(0.0F, 1.0F, 0.0F, 1.0F);
+		}
+
+		return IsVisible(this->m_Head, pTargetPlayer->m_Head) ? RenderFunctions::Color32(1.0F, 1.0F, 0.0F, 1.0F) : RenderFunctions::Color32(1.0F, 0.0F, 0.0F, 1.0F);
 	}
 }; //Size: 0x0512
 
@@ -108,7 +126,3 @@ public:
 	int GetNumberOfPlayers();
 };
 
-bool IsValidPtr(void* pPointer);
-bool IsVisible(Vec3 vFrom, Vec3 vTo);
-void EngineDrawString(char* pText, int x, int y, int r, int g, int b, int pUnknown, int pUnknown2);
-void DrawString(int x, int y, int r, int g, int b, char* pText, ...);
