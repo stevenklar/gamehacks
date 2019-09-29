@@ -2,7 +2,7 @@
 #include "Process.h"
 #include "BlackBone/Process/Process.h"
 
-blackbone::Process* Icetrix::Process::GetIntance()
+blackbone::Process* Icetrix::Process::GetInstance()
 {
 	static blackbone::Process* instance = new blackbone::Process;
 	instance->Attach(GetCurrentProcessId());
@@ -11,5 +11,6 @@ blackbone::Process* Icetrix::Process::GetIntance()
 
 Icetrix::Process::~Process()
 {
-	GetIntance()->Detach();
+	GetInstance()->Detach();
+	delete GetInstance();
 }

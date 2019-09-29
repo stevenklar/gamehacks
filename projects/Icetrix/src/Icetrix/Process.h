@@ -10,7 +10,7 @@ namespace Icetrix
 		Process();
 		Process(const Process&);
 	public:
-		static blackbone::Process* GetIntance();
+		static blackbone::Process* GetInstance();
 		~Process();
 	};
 }

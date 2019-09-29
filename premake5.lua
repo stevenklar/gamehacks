@@ -20,7 +20,8 @@ workspace "GameHacks"
         symbols "On"
 
     filter { "configurations:Release" }
-        optimize "On"
+        symbols "Off"
+        --optimize "On"
 
     filter {}
 
@@ -38,7 +39,14 @@ function includeBlackbone()
     -- compiler
     includedirs "vendor/Blackbone/src"
     -- linker (include lib file and link it)
-    libdirs "vendor/Blackbone/build/Win32/Debug"
+    filter { "configurations:Debug" }
+        libdirs "vendor/Blackbone/build/Win32/Debug"
+
+    filter { "configurations:Release" }
+        libdirs "vendor/Blackbone/build/Win32/Release"
+
+    filter {}
+
     links "Blackbone"
 end
 

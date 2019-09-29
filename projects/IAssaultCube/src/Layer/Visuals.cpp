@@ -1,33 +1,42 @@
 #include "pch.h"
-#include "Visuals.h"
 #include "BlackBone/LocalHook/LocalHook.hpp"
-#include "Icetrix/Process.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_win32.h"
 #include "imgui/imgui_impl_opengl2.h"
+#include "Icetrix/Process.h"
+#include "Icetrix/Application.h"
+#include "Visuals.h"
+#include "Feature.h"
 
 #pragma comment(lib, "opengl32.lib")
 
 bool Visuals::OnAttach()
 {
+	static HWND hwnd = NULL;
+	Game g;
+	while (hwnd == NULL)
+	{
+		hwnd = FindWindowA(NULL, "AssaultCube");
+	}
+
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 
-	HWND hwnd = FindWindowA(NULL, "AssaultCube");
 	ImGui_ImplWin32_Init(hwnd);
 	ImGui_ImplOpenGL2_Init();
 	ImGui::StyleColorsDark();
+
+	auto features = Features::GetInstance();
+	features->Push(new Feature{"ESP", false});
 
 	return (HookSwapBuffers() && HookPollEvent());
 }
 
 bool Visuals::OnUpdate()
 {
-    if (GetAsyncKeyState(VK_F9) & 1)
+    if (GetAsyncKeyState(VK_F9) & 1) // PANIC
     {
-        // panic
-        // should be implemented somewhere else instead, e. g. InputLayer or Menu...
         return false;
     }
 
@@ -67,13 +76,12 @@ void __stdcall h_wglSwapBuffers(HDC& h)
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
 
-	// feature toggle
-	static bool bDraw = false;
-
 	// menu toggle
 	static bool bShow = true;
 	if (GetAsyncKeyState(VK_INSERT) & 1)
 		bShow = !bShow;
+
+	auto features = Features::GetInstance();
 
 	if (bShow)
 	{
@@ -81,8 +89,33 @@ void __stdcall h_wglSwapBuffers(HDC& h)
 		SDL_ShowCursor(SDL_TRUE);
 		//ImGui::ShowDemoWindow(&bShow);
 
-		ImGui::Begin("Visuals");
-		ImGui::Checkbox("Draw ESP", &bDraw);
+		ImGui::Begin("Icetrix vagreany unpx");
+
+		if (ImGui::Button("Activate"))
+		{
+			// TODO: Replace with Features class method
+			for (auto feature : features->All())
+			{
+				feature->enabled = true;
+			}
+		}
+
+		if (ImGui::Button("Deactivate"))
+		{
+			for (auto feature : features->All())
+			{
+				feature->enabled = false;
+			}
+		}
+
+		ImGui::SameLine(150);
+		ImGui::Spacing();
+
+		for (auto feature : features->All())
+		{
+			ImGui::Checkbox(feature->label, &feature->enabled);
+		}
+
 		ImGui::End();
 	}
 	else
@@ -94,7 +127,7 @@ void __stdcall h_wglSwapBuffers(HDC& h)
 	ImGui::Render();
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
-	if (bDraw)
+	if (features->Get("ESP")->enabled)
 		Visuals::Draw();
 
 	RestoreGL();
