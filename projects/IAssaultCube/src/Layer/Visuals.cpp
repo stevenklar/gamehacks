@@ -29,8 +29,9 @@ bool Visuals::OnAttach()
 
 	auto features = Features::GetInstance();
 	features->Push(new Feature{"ESP", false});
+	features->Push(new Feature{"PaperWalls", false});
 
-	return (HookSwapBuffers() && HookPollEvent());
+	return (HookSwapBuffers() && HookPollEvent() && HookBindTexture());
 }
 
 bool Visuals::OnUpdate()
@@ -61,6 +62,15 @@ void Visuals::OnDetach()
 	else
 	{
 		std::cout << "[!] Failed to restore pollEvent" << std::endl;
+	}
+
+	if (d_glBindTexture.Restore())
+	{
+		std::cout << "[+] Restored 'glBindTexture'" << std::endl;
+	}
+	else
+	{
+		std::cout << "[!] Failed to restore glBindTexture" << std::endl;
 	}
 
 	ImGui_ImplOpenGL2_Shutdown();
@@ -150,6 +160,12 @@ void __cdecl h_pollEvent(SDL_Event*& event)
 	}
 }
 
+void WINAPI h_glBindTexture(GLenum &target, GLuint &texture)
+{
+	if (Features::GetInstance()->Get("PaperWalls")->enabled)
+		glDisable(GL_DEPTH_TEST);
+}
+
 bool Visuals::HookPollEvent()
 {
 	HMODULE hSdlModule = GetModuleHandle("sdl.dll");
@@ -196,6 +212,32 @@ bool Visuals::HookSwapBuffers()
 	else
 	{
 		std::cout << "[!] Failed to Hook: wglSwapBuffers" << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool Visuals::HookBindTexture()
+{
+	HMODULE hModule = GetModuleHandle("opengl32.dll");
+
+	if (hModule == NULL)
+	{
+		std::cout << "[!] Failed to find opengl32.dll\n";
+		return false;
+	}
+
+	auto dglBindTexture = GetProcAddress(hModule, "glBindTexture");
+	f_glBindTexture glBindTexture = reinterpret_cast<f_glBindTexture>(dglBindTexture);
+
+	if (d_glBindTexture.Hook(glBindTexture, &h_glBindTexture, blackbone::HookType::HWBP))
+	{
+		std::cout << "[+] Hooked 'glBindTexture'" << std::endl;
+	}
+	else
+	{
+		std::cout << "[!] Failed to Hook: glBindTexture" << std::endl;
 		return false;
 	}
 
