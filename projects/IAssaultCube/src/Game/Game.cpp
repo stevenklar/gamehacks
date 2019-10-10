@@ -14,6 +14,7 @@ bool IsValidPtr(void* pPointer)
 
 bool IsVisible(Vec3 vFrom, Vec3 vTo)
 {
+#ifdef IX_WIN32
 	__asm
 	{
 		push vTo.z;
@@ -30,10 +31,14 @@ bool IsVisible(Vec3 vFrom, Vec3 vTo)
 		call ebx;
 		add esp, 0x18;
 	}
+#else
+	return false;
+#endif
 }
 
-void EngineDrawString(char* pText, int x, int y, int r, int g, int b, int pUnknown, int pUnknown2)
+void EngineDrawString(char* pText, float x, float y, float r, float g, float b, int pUnknown, int pUnknown2)
 {
+#ifdef IX_WIN32
 	__asm
 	{
 		push pUnknown2;
@@ -48,9 +53,10 @@ void EngineDrawString(char* pText, int x, int y, int r, int g, int b, int pUnkno
 		call ecx;
 		add esp, 0x1C;
 	}
+#endif
 }
 
-void DrawString(int x, int y, int r, int g, int b, char* pText, ...)
+void DrawString(float x, float y, float r, float g, float b, char* pText, ...)
 {
 	va_list va_alist;
 
@@ -69,7 +75,7 @@ void DrawString(int x, int y, int r, int g, int b, char* pText, ...)
 
 playerent* Game::GetLocalPlayer()
 {
-	return *(playerent**)(m_LocalPlayer);
+	return *reinterpret_cast<playerent**>(m_LocalPlayer);
 }
 
 playerent** Game::GetEntityList()
@@ -78,7 +84,8 @@ playerent** Game::GetEntityList()
 	return pEntityList->entities;
 }
 
+#include <memory>
 int Game::GetNumberOfPlayers()
 {
-	return *(int*)m_NumOfPlayers;
+	return *reinterpret_cast<int*>(m_NumOfPlayers);
 }

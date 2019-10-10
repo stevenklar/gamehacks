@@ -1,7 +1,6 @@
 #pragma once
 
-#include <Windows.h>
-#include <math.h>
+#include "pch.h"
 
 struct Vector2 { float x, y; };
 struct Vector3 { float x, y, z; };

@@ -1,10 +1,5 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
-#include "Icetrix.h"
-#include "Layer/Visuals.h"
-#include "Layer/Patches.h"
-#include "Layer/Aimbot.h"
-#include "Icetrix/Application.h"
+#include "Icetrix/Entrypoint.h"
 
 class AssaultCubeInternal : public Icetrix::Application
 {

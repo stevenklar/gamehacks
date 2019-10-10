@@ -38,8 +38,10 @@ int main()
 	char path[MAX_PATH];
 	GetCurrentDirectoryA(MAX_PATH, path);
 
-	std::filesystem::path cwd = std::filesystem::current_path() / "./IAssaultCube.dll";
-	const char* dll = "./IAssaultCube.dll";
+	const char* dll = "..\\bin\\IAssaultCube\\Release\\Win32\\IAssaultCube.dll";
+	std::filesystem::path cwd = std::filesystem::current_path() / dll;
+	LOG("Try to inject: ");
+	LOG(cwd);
 	auto& modules = process.modules();
 	auto& modData = modules.Inject(cwd);
 
@@ -58,6 +60,8 @@ int main()
 	}
 
 	process.Detach();
+
+	std::cin;
 
 	return 0;
 }

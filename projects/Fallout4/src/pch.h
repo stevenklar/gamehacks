@@ -9,11 +9,14 @@
 // Std Header Files
 #include <iostream>
 #include <array>
+#include <cstdint>
 #include <vector>
+#include <tlhelp32.h>
+#include <Psapi.h>
 
 // Custom Header Files
-#include "Icetrix.h"
+#include <Icetrix.h>
 
 // Application Layers
-#include "Layer/Visuals.h"
 #include "Layer/Patches.h"
+#include "Layer/Visuals.h"

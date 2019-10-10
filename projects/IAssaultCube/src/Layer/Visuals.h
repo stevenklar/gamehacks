@@ -10,6 +10,9 @@ typedef void(__stdcall* f_wglSwapBuffers)(HDC h);
 typedef void(__cdecl* f_pollEvent)(SDL_Event* e);
 typedef void (WINAPI* f_glBindTexture) (GLenum target, GLuint texture);
 
+void StyleDark();
+void ApplyDefaultStyle();
+
 class Visuals : public Icetrix::Layer
 {
 private:

@@ -1,12 +1,11 @@
 #pragma once
 
-#include <Windows.h>
+#include "pch.h"
 #include "Application.h"
-#include <thread>
 
 DWORD WINAPI DllThread(LPVOID lpParameter)
 {
-    Icetrix::Application* app = Icetrix::CreateApplication();
+    Icetrix::Application* app = Icetrix::CreateApplication(); 
     app->Run();
     delete app;
     return 0;
@@ -26,4 +25,3 @@ BOOL WINAPI DllMain(_In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID l
 
     return TRUE;
 }
-

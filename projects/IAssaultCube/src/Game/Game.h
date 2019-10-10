@@ -7,8 +7,8 @@
 
 bool IsValidPtr(void* pPointer);
 bool IsVisible(Vec3 vFrom, Vec3 vTo);
-void EngineDrawString(char* pText, int x, int y, int r, int g, int b, int pUnknown, int pUnknown2);
-void DrawString(int x, int y, int r, int g, int b, char* pText, ...);
+void EngineDrawString(char* pText, float x, float y, float r, float g, float b, int pUnknown, int pUnknown2);
+void DrawString(float x, float y, float r, float g, float b, char* pText, ...);
 
 class playerentPtr
 {

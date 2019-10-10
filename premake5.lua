@@ -6,30 +6,49 @@ workspace "GameHacks"
     location ("build/gen")
     targetdir("build/bin/%{prj.name}/%{cfg.longname}")
     objdir   ("build/obj/%{prj.name}/%{cfg.longname}")
-    defines { "_CRT_SECURE_NO_WARNINGS" }
 
-    platforms      "Win32"
-    architecture   "x86"
+    defines { "_CRT_SECURE_NO_WARNINGS" }
 
     language       "C++"
     cppdialect     "C++latest"
 
     configurations { "Debug", "Release" }
+    platforms      { "Win32", "Win64" }
 
-    filter { "configurations:Debug" }
+    filter "platforms:Win32"
+        architecture "x86"
+        defines "IX_WIN32"
+    filter "platforms:Win64"
+        architecture "x64"
+        defines "IX_WIN64"
+
+    filter "configurations:Debug"
+        staticruntime "On"
         symbols "On"
-
-    filter { "configurations:Release" }
+    filter "configurations:Release"
+        staticruntime "On"
         symbols "Off"
-        --optimize "On"
+        optimize "On"
 
     filter {}
 
     flags {
         "MultiProcessorCompile"
     }
+    defines {
+        "WINDOWS_IGNORE_PACKING_MISMATCH"
+    }
 
 -- Helper
+function includeProject()
+    files {
+        "projects/%{prj.name}/src/**",
+    }
+
+    includedirs "projects/%{prj.name}/src"
+    includedirs "projects/%{prj.name}/vendor"
+end
+
 function includeDirectX()
     includedirs "C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Include"
     libdirs "C:/Program Files (x86)/Microsoft DirectX SDK (June 2010)/Lib/x86"
@@ -39,15 +58,44 @@ function includeBlackbone()
     -- compiler
     includedirs "vendor/Blackbone/src"
     -- linker (include lib file and link it)
-    filter { "configurations:Debug" }
+    filter { "configurations:Debug", "platforms:Win32" }
         libdirs "vendor/Blackbone/build/Win32/Debug"
-
-    filter { "configurations:Release" }
+    filter { "configurations:Debug", "platforms:Win64" }
+        libdirs "vendor/Blackbone/build/x64/Debug"
+    filter { "configurations:Release", "platforms:Win32" }
         libdirs "vendor/Blackbone/build/Win32/Release"
+    filter { "configurations:Release", "platforms:Win64" }
+        libdirs "vendor/Blackbone/build/x64/Release"
 
     filter {}
 
     links "Blackbone"
+end
+
+function includeLegacySdl()
+    includedirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/include"
+    --libdirs ""
+    links "SDL"
+
+    filter { "platforms:Win32" }
+        libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/lib/x86"
+    filter { "platforms:Win64" }
+        libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/lib/x64"
+    filter {}
+end
+
+function includeImGui()
+    --includedirs "projects/%{prj.name}/vendor/imgui"
+    
+    files {
+        "projects/%{prj.name}/vendor/imgui/**.h",
+        "projects/%{prj.name}/vendor/imgui/**.cpp",
+    }
+end
+
+function includePrecompiledHeaders()
+    pchheader "pch.h"
+    pchsource "projects/%{prj.name}/src/pch.cpp"
 end
 
 -- Framework
@@ -64,60 +112,37 @@ project "Icetrix"
     includeBlackbone();
 
     function includeIcetrix()
-        -- compiler
+        includeBlackbone()
         includedirs "projects/Icetrix/src"
-        -- linker (include lib file and link it)
         links "Icetrix"
     end
 
 -- Projects
 project "IAssaultCube"
+    -- 32bit
     kind "SharedLib"
     characterset "MBCS"
 
-    defines {
-        "WINDOWS_IGNORE_PACKING_MISMATCH"
-    }
+    --includePrecompiledHeaders()
+    includeProject()
+    includeIcetrix()
 
+    includeImGui()
+    includeLegacySdl()
+
+project "Fallout4"
+    -- 64bit
+    kind "SharedLib"
+    characterset "MBCS"
+
+    --includePrecompiledHeaders()
+    includeProject()
+    includeIcetrix()
+
+    includedirs "vendor/imgui"
     files {
-        "projects/%{prj.name}/src/**",
+        "vendor/imgui/*.h",
+        "vendor/imgui/*.cpp",
+        "vendor/imgui/examples/imgui_impl_win32.*",
+        "vendor/imgui/examples/imgui_impl_dx11.*",
     }
-
-    -- imgui
-    files {
-        "projects/%{prj.name}/vendor/imgui/**.h",
-        "projects/%{prj.name}/vendor/imgui/**.cpp",
-    }
-    -- vendors
-    includedirs "projects/%{prj.name}/vendor"
-
-    --links "dwmapi"
-    -- include own path to use project relative includes
-    includedirs "projects/%{prj.name}/src"
-    --includedirs "projects/%{prj.name}/vendor"
-    includedirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/include"
-    libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/lib/x86"
-    links "SDL"
-    includeBlackbone()
-    includeIcetrix();
-
-project "PAssaultCube" -- Loader for IAssaultCube
-    kind "ConsoleApp"
-
-    files {
-        "projects/%{prj.name}/src/**",
-    }
-
-    includeBlackbone()
-
---[[
-project "EAssaultCube"
-    kind "WindowedApp"
-
-    files {
-        "projects/%{prj.name}/src/**",
-    }
-
-    includeDirectX()
-    includeIcetrix();
-]]
