@@ -34,14 +34,6 @@ bool Patches::OnUpdate()
         return false;
     }
 
-	if (GetAsyncKeyState(VK_DELETE) & 1)
-	{
-		for (Icetrix::Patch patch : patches)
-		{
-			features->Get(patch.name)->Toggle();
-		}
-	}
-
 	if (process->valid())
 	{
 		auto mainModule = process->modules().GetMainModule();

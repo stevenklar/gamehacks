@@ -1,12 +1,44 @@
 #include "pch.h"
 #include "Visuals.h"
-
+#include "Icetrix/Menu/ImGuiDesign.h"
 #include "imgui.h"
 #include "examples/imgui_impl_win32.h"
 #include "examples/imgui_impl_dx11.h"
 #include "d3d11.h"
 
 #pragma comment(lib, "d3d11.lib")
+
+static bool bShow = true;
+LONG_PTR OriginalWndProc = NULL;
+WNDPROC WndProcHandler = NULL;
+HWND hwnd = NULL;
+IMGUI_IMPL_API LRESULT  ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	POINT mPos;
+	GetCursorPos(&mPos);
+	ScreenToClient(hWnd, &mPos);
+	ImGui::GetIO().MousePos.x = mPos.x;
+	ImGui::GetIO().MousePos.y = mPos.y;
+
+	if (uMsg == WM_KEYUP)
+	{
+		if (wParam == VK_INSERT)
+		{
+			bShow = !bShow;
+		}
+	}
+
+	if (bShow)
+	{
+		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+		return true;
+	}
+
+	return CallWindowProc(WndProcHandler, hWnd, uMsg, wParam, lParam);
+}
 
 void __fastcall h_Present(IDXGISwapChain* &pChain, UINT &SyncInterval, UINT &Flags)
 {
@@ -23,24 +55,36 @@ void __fastcall h_Present(IDXGISwapChain* &pChain, UINT &SyncInterval, UINT &Fla
 		if (SUCCEEDED(ret))
 			(*&g_pd3dDevice)->GetImmediateContext(&g_pd3dDeviceContext);
 
+		// get window
+		DXGI_SWAP_CHAIN_DESC pDesc;
+		pChain->GetDesc(&pDesc);
+		hwnd = pDesc.OutputWindow;
+
+		if (!OriginalWndProc)
+			OriginalWndProc = GetWindowLongPtr(hwnd, GWLP_WNDPROC);
+
+		if (!WndProcHandler)
+			WndProcHandler = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)hWndProc);
+
+		// setup imgui
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		ImGui::StyleColorsDark();
 
-		static HWND hwnd = NULL;
-
-		while (hwnd == NULL)
-			hwnd = FindWindowA(NULL, "Fallout4");
-
 		ImGui_ImplWin32_Init(hwnd);
 		ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
+		Icetrix::Menu::ApplyIcetrixDesign();
 
 		ID3D11Texture2D* pBackBuffer;
 		pChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-		g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &ppRTView);
-		pBackBuffer->Release();
+		
+		if (pBackBuffer)
+		{
+			g_pd3dDevice->CreateRenderTargetView(pBackBuffer, NULL, &ppRTView);
+			pBackBuffer->Release();
+		}
 
 		init = true;
 	}
@@ -49,14 +93,38 @@ void __fastcall h_Present(IDXGISwapChain* &pChain, UINT &SyncInterval, UINT &Fla
 	ImGui_ImplWin32_NewFrame();
 
 	ImGui::NewFrame();
-	//Menu is displayed when g_ShowMenu is TRUE
-	if (true)
-	{
-		bool bShow = true;
-		ImGui::ShowDemoWindow(&bShow);
-	}
-	ImGui::EndFrame();
 
+	auto features = Icetrix::Features::GetInstance();
+	if (bShow)
+	{
+		if (ImGui::Begin("Icetrix vagreany unpx", &bShow, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			if (ImGui::Button("Activate"))
+			{
+				// TODO: Replace with Features class method
+				for (auto feature : features->All())
+				{
+					feature->enabled = true;
+				}
+			}
+
+			if (ImGui::Button("Deactivate"))
+			{
+				for (auto feature : features->All())
+				{
+					feature->enabled = false;
+				}
+			}
+
+			for (auto feature : features->All())
+			{
+				ImGui::Checkbox(feature->label, &feature->enabled);
+			}
+		}
+		ImGui::End();
+	}
+
+	ImGui::EndFrame();
 	ImGui::Render();
 
 	g_pd3dDeviceContext->OMSetRenderTargets(1, &ppRTView, NULL);
@@ -90,12 +158,19 @@ bool Visuals::OnUpdate()
 
 void Visuals::OnDetach()
 {
-	d_Present.Restore();
+	if (d_Present.Restore())
+	{
+		std::cout << "[+] Restored 'Present'" << std::endl;
+	}
+	else
+	{
+		std::cout << "[!] Failed to restore Present" << std::endl;
+	}
 
-	/*
-	ImGui_ImplDX11_Shutdown();
+	SetWindowLongPtrA(hwnd, GWLP_WNDPROC, OriginalWndProc);
+
 	ImGui_ImplWin32_Shutdown();
+	ImGui_ImplDX11_Shutdown();
 	ImGui::DestroyContext();
-	*/
 }
 

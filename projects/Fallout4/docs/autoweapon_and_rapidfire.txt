@@ -1,0 +1,127 @@
+[ENABLE]
+
+aobscanmodule(ALL_WEAPONS_AUTOMATIC_1,Fallout4.exe,74 04 C6 47 74 01) // should be unique
+aobscanmodule(ALL_WEAPONS_AUTOMATIC_2,Fallout4.exe,76 77 80 7F 73 00) // should be unique
+
+ALL_WEAPONS_AUTOMATIC_1:
+  db 90 90
+
+ALL_WEAPONS_AUTOMATIC_2:
+  db 90 90
+
+registersymbol(ALL_WEAPONS_AUTOMATIC_1)
+registersymbol(ALL_WEAPONS_AUTOMATIC_2)
+
+[DISABLE]
+
+ALL_WEAPONS_AUTOMATIC_1:
+  db 74 04
+
+ALL_WEAPONS_AUTOMATIC_2:
+  db 76 77
+
+unregistersymbol(ALL_WEAPONS_AUTOMATIC_1)
+unregistersymbol(ALL_WEAPONS_AUTOMATIC_2)
+
+{
+// ORIGINAL CODE - INJECTION POINT: "Fallout4.exe"+F4CF36
+
+"Fallout4.exe"+F4CF13: 48 8B 4C 24 38           -  mov rcx,[rsp+38]
+"Fallout4.exe"+F4CF18: 48 85 C0                 -  test rax,rax
+"Fallout4.exe"+F4CF1B: 74 1F                    -  je Fallout4.exe+F4CF3C
+"Fallout4.exe"+F4CF1D: 48 85 C9                 -  test rcx,rcx
+"Fallout4.exe"+F4CF20: 74 09                    -  je Fallout4.exe+F4CF2B
+"Fallout4.exe"+F4CF22: 0F B6 81 12 01 00 00     -  movzx eax,byte ptr [rcx+00000112]
+"Fallout4.exe"+F4CF29: EB 07                    -  jmp Fallout4.exe+F4CF32
+"Fallout4.exe"+F4CF2B: 0F B6 80 AA 02 00 00     -  movzx eax,byte ptr [rax+000002AA]
+"Fallout4.exe"+F4CF32: 24 01                    -  and al,01
+"Fallout4.exe"+F4CF34: 84 C0                    -  test al,al
+// ---------- INJECTING HERE ----------
+"Fallout4.exe"+F4CF36: 74 04                    -  je Fallout4.exe+F4CF3C
+"Fallout4.exe"+F4CF38: C6 47 74 01              -  mov byte ptr [rdi+74],01
+// ---------- DONE INJECTING  ----------
+"Fallout4.exe"+F4CF3C: 48 85 C9                 -  test rcx,rcx
+"Fallout4.exe"+F4CF3F: 74 10                    -  je Fallout4.exe+F4CF51
+"Fallout4.exe"+F4CF41: F0 FF 49 08              - lock  dec [rcx+08]
+"Fallout4.exe"+F4CF45: 75 0A                    -  jne Fallout4.exe+F4CF51
+"Fallout4.exe"+F4CF47: 48 8B 01                 -  mov rax,[rcx]
+"Fallout4.exe"+F4CF4A: BA 01 00 00 00           -  mov edx,00000001
+"Fallout4.exe"+F4CF4F: FF 10                    -  call qword ptr [rax]
+"Fallout4.exe"+F4CF51: 48 8B 74 24 78           -  mov rsi,[rsp+78]
+"Fallout4.exe"+F4CF56: 0F 28 74 24 50           -  movaps xmm6,[rsp+50]
+"Fallout4.exe"+F4CF5B: 0F 28 7C 24 40           -  movaps xmm7,[rsp+40]
+}
+{
+// ORIGINAL CODE - INJECTION POINT: "Fallout4.exe"+F4CED8
+
+"Fallout4.exe"+F4CEB7: F0 FF 4B 08              - lock  dec [rbx+08]
+"Fallout4.exe"+F4CEBB: 75 0D                    -  jne Fallout4.exe+F4CECA
+"Fallout4.exe"+F4CEBD: 48 8B 03                 -  mov rax,[rbx]
+"Fallout4.exe"+F4CEC0: BA 01 00 00 00           -  mov edx,00000001
+"Fallout4.exe"+F4CEC5: 48 8B CB                 -  mov rcx,rbx
+"Fallout4.exe"+F4CEC8: FF 10                    -  call qword ptr [rax]
+"Fallout4.exe"+F4CECA: 48 8B 5C 24 70           -  mov rbx,[rsp+70]
+"Fallout4.exe"+F4CECF: 0F 2F 77 50              -  comiss xmm6,[rdi+50]
+"Fallout4.exe"+F4CED3: 72 7C                    -  jb Fallout4.exe+F4CF51
+"Fallout4.exe"+F4CED5: 0F 2F FE                 -  comiss xmm7,xmm6
+// ---------- INJECTING HERE ----------
+"Fallout4.exe"+F4CED8: 76 77                    -  jna Fallout4.exe+F4CF51
+"Fallout4.exe"+F4CEDA: 80 7F 73 00              -  cmp byte ptr [rdi+73],00
+// ---------- DONE INJECTING  ----------
+"Fallout4.exe"+F4CEDE: 74 71                    -  je Fallout4.exe+F4CF51
+"Fallout4.exe"+F4CEE0: 8B 15 82 5A 99 04        -  mov edx,[Fallout4.exe+58E2968]
+"Fallout4.exe"+F4CEE6: 48 8B 0D 6B 74 B5 04     -  mov rcx,[Fallout4.exe+5AA4358]
+"Fallout4.exe"+F4CEED: E8 2E 1A E4 FF           -  call Fallout4.exe+D8E920
+"Fallout4.exe"+F4CEF2: 85 C0                    -  test eax,eax
+"Fallout4.exe"+F4CEF4: 74 5B                    -  je Fallout4.exe+F4CF51
+"Fallout4.exe"+F4CEF6: 44 8B 05 6B 5A 99 04     -  mov r8d,[Fallout4.exe+58E2968]
+"Fallout4.exe"+F4CEFD: 48 8B 0D 54 74 B5 04     -  mov rcx,[Fallout4.exe+5AA4358]
+"Fallout4.exe"+F4CF04: 48 8D 54 24 30           -  lea rdx,[rsp+30]
+"Fallout4.exe"+F4CF09: E8 D2 2C EB FF           -  call Fallout4.exe+DFFBE0
+}
+
+==================================================================================
+
+[ENABLE]
+
+aobscanmodule(RAPIDFIRE,Fallout4.exe,F3 0F 10 79 50 0F) // should be unique
+
+RAPIDFIRE:
+  db 0F 57 FF 90 90
+
+registersymbol(RAPIDFIRE)
+
+[DISABLE]
+
+RAPIDFIRE:
+  db F3 0F 10 79 50
+
+unregistersymbol(RAPIDFIRE)
+
+{
+// ORIGINAL CODE - INJECTION POINT: "Fallout4.exe"+F4CDC6
+
+"Fallout4.exe"+F4CD9E: CC                       -  int 3 
+"Fallout4.exe"+F4CD9F: CC                       -  int 3 
+"Fallout4.exe"+F4CDA0: 40 57                    -  push rdi
+"Fallout4.exe"+F4CDA2: 48 83 EC 60              -  sub rsp,60
+"Fallout4.exe"+F4CDA6: 48 83 3D AA 75 B5 04 00  -  cmp qword ptr [Fallout4.exe+5AA4358],00
+"Fallout4.exe"+F4CDAE: 48 8B F9                 -  mov rdi,rcx
+"Fallout4.exe"+F4CDB1: 0F 84 A9 01 00 00        -  je Fallout4.exe+F4CF60
+"Fallout4.exe"+F4CDB7: 48 89 74 24 78           -  mov [rsp+78],rsi
+"Fallout4.exe"+F4CDBC: 0F 29 74 24 50           -  movaps [rsp+50],xmm6
+"Fallout4.exe"+F4CDC1: 0F 29 7C 24 40           -  movaps [rsp+40],xmm7
+// ---------- INJECTING HERE ----------
+"Fallout4.exe"+F4CDC6: F3 0F 10 79 50           -  movss xmm7,[rcx+50]
+// ---------- DONE INJECTING  ----------
+"Fallout4.exe"+F4CDCB: 0F 57 F6                 -  xorps xmm6,xmm6
+"Fallout4.exe"+F4CDCE: 0F 28 C7                 -  movaps xmm0,xmm7
+"Fallout4.exe"+F4CDD1: F3 0F 5C 05 7B E8 C0 04  -  subss xmm0,[Fallout4.exe+5B5B654]
+"Fallout4.exe"+F4CDD9: 0F 2F C6                 -  comiss xmm0,xmm6
+"Fallout4.exe"+F4CDDC: 73 03                    -  jae Fallout4.exe+F4CDE1
+"Fallout4.exe"+F4CDDE: 0F 28 C6                 -  movaps xmm0,xmm6
+"Fallout4.exe"+F4CDE1: 80 79 76 00              -  cmp byte ptr [rcx+76],00
+"Fallout4.exe"+F4CDE5: F3 0F 11 41 50           -  movss [rcx+50],xmm0
+"Fallout4.exe"+F4CDEA: 0F 84 DF 00 00 00        -  je Fallout4.exe+F4CECF
+"Fallout4.exe"+F4CDF0: 0F 2F C6                 -  comiss xmm0,xmm6
+}

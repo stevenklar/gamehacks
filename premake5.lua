@@ -73,29 +73,27 @@ function includeBlackbone()
 end
 
 function includeLegacySdl()
-    includedirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/include"
-    --libdirs ""
+    includedirs "vendor/sdl_1.2/include"
     links "SDL"
 
     filter { "platforms:Win32" }
-        libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/lib/x86"
+        libdirs "vendor/sdl_1.2/lib/x86"
     filter { "platforms:Win64" }
-        libdirs "projects/%{prj.name}/vendor/imgui/misc/sdl_1.2/lib/x64"
+        libdirs "vendor/sdl_1.2/lib/x64"
     filter {}
-end
-
-function includeImGui()
-    --includedirs "projects/%{prj.name}/vendor/imgui"
-    
-    files {
-        "projects/%{prj.name}/vendor/imgui/**.h",
-        "projects/%{prj.name}/vendor/imgui/**.cpp",
-    }
 end
 
 function includePrecompiledHeaders()
     pchheader "pch.h"
     pchsource "projects/%{prj.name}/src/pch.cpp"
+end
+
+function includeImGui()
+    includedirs "vendor/imgui"
+    files {
+        "vendor/imgui/*.h",
+        "vendor/imgui/*.cpp",
+    }
 end
 
 -- Framework
@@ -110,6 +108,7 @@ project "Icetrix"
     includedirs "projects/%{prj.name}/src"
     includeDirectX()
     includeBlackbone();
+    includeImGui()
 
     function includeIcetrix()
         includeBlackbone()
@@ -127,8 +126,12 @@ project "IAssaultCube"
     includeProject()
     includeIcetrix()
 
-    includeImGui()
     includeLegacySdl()
+    includeImGui()
+    files {
+        "vendor/imgui/examples/imgui_impl_win32.*",
+        "vendor/imgui/examples/imgui_impl_opengl2.*",
+    }
 
 project "Fallout4"
     -- 64bit
@@ -139,10 +142,8 @@ project "Fallout4"
     includeProject()
     includeIcetrix()
 
-    includedirs "vendor/imgui"
+    includeImGui()
     files {
-        "vendor/imgui/*.h",
-        "vendor/imgui/*.cpp",
         "vendor/imgui/examples/imgui_impl_win32.*",
         "vendor/imgui/examples/imgui_impl_dx11.*",
     }
