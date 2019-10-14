@@ -1,14 +1,16 @@
 #include "pch.h"
 #include "Icetrix/Entrypoint.h"
+#include "Icetrix/Layer/PanicKey.h"
 
-class AssaultCubeInternal : public Icetrix::Application
+class App : public Icetrix::Application
 {
 public:
-	AssaultCubeInternal()
+	App()
 	{
-		PushLayer(new Visuals());
-		PushLayer(new Patches());
+		new Icetrix::Layer::PanicKey(this);
+		new Visuals(this);
+		new Patches(this);
 	}
 };
 
-Icetrix::Application* Icetrix::CreateApplication() { return new AssaultCubeInternal(); }
+Icetrix::Application* Icetrix::CreateApplication() { return new App(); }

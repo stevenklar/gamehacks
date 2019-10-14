@@ -14,33 +14,42 @@ WNDPROC WndProcHandler = NULL;
 HWND hwnd = NULL;
 IMGUI_IMPL_API LRESULT  ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+void Visuals::OnAttach(const Icetrix::LayerEvent::Attach &attach)
 {
-	ImGuiIO& io = ImGui::GetIO();
-	POINT mPos;
-	GetCursorPos(&mPos);
-	ScreenToClient(hWnd, &mPos);
-	ImGui::GetIO().MousePos.x = mPos.x;
-	ImGui::GetIO().MousePos.y = mPos.y;
+	auto& modules = Icetrix::Process::GetInstance()->modules();	
 
-	if (uMsg == WM_KEYUP)
+	// https://www.unknowncheats.me/wiki/IDA_Pro:Reverse_D3D11_Present_function_using_IDA_Pro
+	f_Present present = reinterpret_cast<f_Present>(modules.GetModule(L"dxgi.dll")->baseAddress + 0x4300); // IDXGISwapChainPresent
+	
+	if (d_Present.Hook(present, &Visuals::h_Present, blackbone::HookType::HWBP))
 	{
-		if (wParam == VK_INSERT)
-		{
-			bShow = !bShow;
-		}
+		std::cout << "[+] Hooked 'Present'" << std::endl;
 	}
-
-	if (bShow)
+	else
 	{
-		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
-		return true;
+		std::cout << "[!] Failed to Hook: Present" << std::endl;
 	}
-
-	return CallWindowProc(WndProcHandler, hWnd, uMsg, wParam, lParam);
 }
 
-void __fastcall h_Present(IDXGISwapChain* &pChain, UINT &SyncInterval, UINT &Flags)
+void Visuals::OnDetach(const Icetrix::LayerEvent::Detach &detach)
+{
+	if (d_Present.Restore())
+	{
+		std::cout << "[+] Restored 'Present'" << std::endl;
+	}
+	else
+	{
+		std::cout << "[!] Failed to restore Present" << std::endl;
+	}
+
+	SetWindowLongPtrA(hwnd, GWLP_WNDPROC, OriginalWndProc);
+
+	ImGui_ImplWin32_Shutdown();
+	ImGui_ImplDX11_Shutdown();
+	ImGui::DestroyContext();
+}
+
+void __fastcall Visuals::h_Present(IDXGISwapChain* &pChain, UINT &SyncInterval, UINT &Flags)
 {
 	static bool init = false;
 	static ID3D11Device* g_pd3dDevice = NULL;
@@ -64,7 +73,7 @@ void __fastcall h_Present(IDXGISwapChain* &pChain, UINT &SyncInterval, UINT &Fla
 			OriginalWndProc = GetWindowLongPtr(hwnd, GWLP_WNDPROC);
 
 		if (!WndProcHandler)
-			WndProcHandler = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)hWndProc);
+			WndProcHandler = (WNDPROC)SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)&Visuals::hWndProc);
 
 		// setup imgui
 		IMGUI_CHECKVERSION();
@@ -131,46 +140,29 @@ void __fastcall h_Present(IDXGISwapChain* &pChain, UINT &SyncInterval, UINT &Fla
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-bool Visuals::OnAttach()
+LRESULT CALLBACK Visuals::hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	auto& modules = Icetrix::Process::GetInstance()->modules();	
+	ImGuiIO& io = ImGui::GetIO();
+	POINT mPos;
+	GetCursorPos(&mPos);
+	ScreenToClient(hWnd, &mPos);
+	ImGui::GetIO().MousePos.x = mPos.x;
+	ImGui::GetIO().MousePos.y = mPos.y;
 
-	// https://www.unknowncheats.me/wiki/IDA_Pro:Reverse_D3D11_Present_function_using_IDA_Pro
-	f_Present present = reinterpret_cast<f_Present>(modules.GetModule(L"dxgi.dll")->baseAddress + 0x4300); // IDXGISwapChainPresent
-	
-	if (d_Present.Hook(present, &h_Present, blackbone::HookType::HWBP))
+	if (uMsg == WM_KEYUP)
 	{
-		std::cout << "[+] Hooked 'Present'" << std::endl;
-	}
-	else
-	{
-		std::cout << "[!] Failed to Hook: Present" << std::endl;
-		return false;
-	}
-
-	return true;
-}
-
-bool Visuals::OnUpdate()
-{
-	return true;
-}
-
-void Visuals::OnDetach()
-{
-	if (d_Present.Restore())
-	{
-		std::cout << "[+] Restored 'Present'" << std::endl;
-	}
-	else
-	{
-		std::cout << "[!] Failed to restore Present" << std::endl;
+		if (wParam == VK_INSERT)
+		{
+			bShow = !bShow;
+		}
 	}
 
-	SetWindowLongPtrA(hwnd, GWLP_WNDPROC, OriginalWndProc);
+	if (bShow)
+	{
+		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+		return true;
+	}
 
-	ImGui_ImplWin32_Shutdown();
-	ImGui_ImplDX11_Shutdown();
-	ImGui::DestroyContext();
+	return CallWindowProc(WndProcHandler, hWnd, uMsg, wParam, lParam);
 }
 

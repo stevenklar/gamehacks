@@ -6,12 +6,20 @@
 
 typedef void(__fastcall* f_Present)(IDXGISwapChain* pChain, UINT SyncInterval, UINT Flags);
 
-class Visuals : public Icetrix::Layer
+class Visuals
 {
 private:
 	blackbone::Detour<f_Present> d_Present;
 public:
-	bool OnAttach();
-	bool OnUpdate();
-	void OnDetach();
+	Visuals(Icetrix::Application* app)
+	{
+		app->dispatcher.sink<Icetrix::LayerEvent::Attach>().connect<&Visuals::OnAttach>(*this);
+		app->dispatcher.sink<Icetrix::LayerEvent::Detach>().connect<&Visuals::OnDetach>(*this);
+	}
+
+	void OnAttach(const Icetrix::LayerEvent::Attach &attach);
+	void OnDetach(const Icetrix::LayerEvent::Detach &detach);
+
+	static void __fastcall h_Present(IDXGISwapChain*& pChain, UINT& SyncInterval, UINT& Flags);
+	static LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };

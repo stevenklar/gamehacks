@@ -121,8 +121,8 @@ public:
 	static const DWORD m_NumOfPlayers = 0x50F500;
 	static const DWORD m_LocalPlayer = 0x50F4F4;
 
-	playerent* GetLocalPlayer();
-	playerent** GetEntityList();
-	int GetNumberOfPlayers();
+	static playerent* GetLocalPlayer();
+	static playerent** GetEntityList();
+	static int GetNumberOfPlayers();
 };
 

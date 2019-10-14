@@ -8,24 +8,19 @@ void Icetrix::Application::Run()
 #ifdef _DEBUG
 	Console* console = new Console;
 #endif
-
-    for (Layer* layer : layers)
-        layer->OnAttach();
+	dispatcher.trigger<Icetrix::LayerEvent::Attach>();
     
-    while (!panic)
-        for (Layer* layer : layers)
-            if (!layer->OnUpdate())
-                panic = true;
+	while (!this->panic)
+		dispatcher.trigger<Icetrix::LayerEvent::Update>();
 
-    for (Layer* layer : layers)
-        layer->OnDetach();
+	dispatcher.trigger<Icetrix::LayerEvent::Detach>();
 
 #ifdef _DEBUG
 	delete console;
 #endif
 }
 
-void Icetrix::Application::PushLayer(Layer* layer)
+void Icetrix::Application::Panic()
 {
-    layers.push_back(layer);
+	this->panic = true;
 }

@@ -1,14 +1,16 @@
 #include "pch.h"
 #include "Icetrix/Entrypoint.h"
+#include "Icetrix/Layer/PanicKey.h"
 
-class Fallout4 : public Icetrix::Application
+class App : public Icetrix::Application
 {
 public:
-	Fallout4()
+	App()
 	{
-		PushLayer(new Patches());
-		PushLayer(new Visuals());
+		new Icetrix::Layer::PanicKey(this);
+		new Visuals(this);
+		new Patches(this);
 	}
 };
 
-Icetrix::Application* Icetrix::CreateApplication() { return new Fallout4(); }
+Icetrix::Application* Icetrix::CreateApplication() { return new App(); }

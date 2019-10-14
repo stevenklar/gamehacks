@@ -46,7 +46,6 @@ function includeProject()
     }
 
     includedirs "projects/%{prj.name}/src"
-    includedirs "projects/%{prj.name}/vendor"
 end
 
 function includeDirectX()
@@ -96,6 +95,13 @@ function includeImGui()
     }
 end
 
+function includeEntt()
+    includedirs "vendor/entt"
+    files {
+        "vendor/entt/entt.hpp",
+    }
+end
+
 -- Framework
 project "Icetrix"
     kind "StaticLib"
@@ -106,14 +112,18 @@ project "Icetrix"
     }
 
     includedirs "projects/%{prj.name}/src"
-    includeDirectX()
     includeBlackbone();
+    includeEntt()
+    includeDirectX()
     includeImGui()
 
     function includeIcetrix()
         includeBlackbone()
         includedirs "projects/Icetrix/src"
         links "Icetrix"
+
+        includeEntt()
+        includeImGui()
     end
 
 -- Projects
@@ -122,12 +132,10 @@ project "IAssaultCube"
     kind "SharedLib"
     characterset "MBCS"
 
-    --includePrecompiledHeaders()
     includeProject()
     includeIcetrix()
 
     includeLegacySdl()
-    includeImGui()
     files {
         "vendor/imgui/examples/imgui_impl_win32.*",
         "vendor/imgui/examples/imgui_impl_opengl2.*",
@@ -138,11 +146,22 @@ project "Fallout4"
     kind "SharedLib"
     characterset "MBCS"
 
-    --includePrecompiledHeaders()
     includeProject()
     includeIcetrix()
 
-    includeImGui()
+    files {
+        "vendor/imgui/examples/imgui_impl_win32.*",
+        "vendor/imgui/examples/imgui_impl_dx11.*",
+    }
+
+project "AgeOfWonders3"
+    -- 32bit
+    kind "SharedLib"
+    characterset "MBCS"
+
+    includeProject()
+    includeIcetrix()
+
     files {
         "vendor/imgui/examples/imgui_impl_win32.*",
         "vendor/imgui/examples/imgui_impl_dx11.*",

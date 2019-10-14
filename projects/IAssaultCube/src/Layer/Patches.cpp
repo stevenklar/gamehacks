@@ -5,7 +5,7 @@
 #include "Patches.h"
 #include "Icetrix/Feature.h"
 
-bool Patches::OnAttach()
+void Patches::OnAttach(const Icetrix::LayerEvent::Attach &attach)
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 	Icetrix::Features* features = Icetrix::Features::GetInstance();
@@ -25,11 +25,9 @@ bool Patches::OnAttach()
 	}
 
 	features->Push(new Icetrix::Feature{ "Pseudo Unlimited Health", false });
-
-	return true;
 }
 
-bool Patches::OnUpdate()
+void Patches::OnUpdate(const Icetrix::LayerEvent::Update &update)
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 	Icetrix::Features* features = Icetrix::Features::GetInstance();
@@ -57,14 +55,12 @@ bool Patches::OnUpdate()
 
 	if (features->Get("Pseudo Unlimited Health")->enabled)
 	{
-		g.GetLocalPlayer()->m_Health = 100000;
-		g.GetLocalPlayer()->m_Vest = 100000;
+		Game::GetLocalPlayer()->m_Health = 100000;
+		Game::GetLocalPlayer()->m_Vest = 100000;
 	}
-
-	return true;
 }
 
-void Patches::OnDetach()
+void Patches::OnDetach(const Icetrix::LayerEvent::Detach &detach)
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 
@@ -82,6 +78,6 @@ void Patches::OnDetach()
 		std::cout << "[!] Patches: No valid process found";
 	}
 
-	g.GetLocalPlayer()->m_Health = 100;
-	g.GetLocalPlayer()->m_Vest = 100;
+	Game::GetLocalPlayer()->m_Health = 100;
+	Game::GetLocalPlayer()->m_Vest = 100;
 }

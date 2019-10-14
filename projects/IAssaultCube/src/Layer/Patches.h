@@ -11,14 +11,20 @@
 
 using Icetrix::Patch;
 
-class Patches : public Icetrix::Layer
+class Patches
 {
 public:
-	bool OnAttach() override;
-	bool OnUpdate() override;
-	void OnDetach() override;
+	Patches(Icetrix::Application* app)
+	{
+		app->dispatcher.sink<Icetrix::LayerEvent::Attach>().connect<&Patches::OnAttach>(*this);
+		app->dispatcher.sink<Icetrix::LayerEvent::Update>().connect<&Patches::OnUpdate>(*this);
+		app->dispatcher.sink<Icetrix::LayerEvent::Detach>().connect<&Patches::OnDetach>(*this);
+	}
+
+	void OnAttach(const Icetrix::LayerEvent::Attach &attach);
+	void OnUpdate(const Icetrix::LayerEvent::Update &update);
+	void OnDetach(const Icetrix::LayerEvent::Detach &detach);
 private:
-	Game g;
 	std::vector<Patch>(patches) = {
 		Patch{ "All weapons automatic",			0x63716, { 0x75, 0x09 }, { 0xEB, 0x09 }, 2 },
 		Patch{ "Rapidfire",						0x637e4, { 0x89, 0x0A }, { 0x90, 0x90 }, 2 },

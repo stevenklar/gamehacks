@@ -2,7 +2,7 @@
 #include "BlackBone/LocalHook/LocalHook.hpp"
 #include "Patches.h"
 
-bool Patches::OnAttach()
+void Patches::OnAttach(const Icetrix::LayerEvent::Attach &attach)
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 	Icetrix::Features* features = Icetrix::Features::GetInstance();
@@ -20,19 +20,12 @@ bool Patches::OnAttach()
 	{
 		std::cout << "[!] Patches: No valid process found";
 	}
-
-	return true;
 }
 
-bool Patches::OnUpdate()
+void Patches::OnUpdate(const Icetrix::LayerEvent::Update &update)
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 	Icetrix::Features* features = Icetrix::Features::GetInstance();
-
-    if (GetAsyncKeyState(VK_F9) & 1) // PANIC
-    {
-        return false;
-    }
 
 	if (process->valid())
 	{
@@ -54,11 +47,9 @@ bool Patches::OnUpdate()
 	{
 		std::cout << "[!] Update Patches: No valid process found";
 	}
-
-    return true;
 }
 
-void Patches::OnDetach()
+void Patches::OnDetach(const Icetrix::LayerEvent::Detach &detach)
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 
