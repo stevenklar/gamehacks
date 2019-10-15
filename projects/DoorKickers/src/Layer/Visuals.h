@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Icetrix.h"
-#include <d3d11.h>
 
 class Visuals
 {

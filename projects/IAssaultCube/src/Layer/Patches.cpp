@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Icetrix/Process.h"
 #include "Game/Game.h"
-#include "Icetrix/BytePatch.h"
 #include "Patches.h"
 #include "Icetrix/Feature.h"
 
@@ -14,7 +13,7 @@ void Patches::OnAttach(const Icetrix::LayerEvent::Attach &attach)
 	{
 		auto mainModule = process->modules().GetMainModule();
 
-		for (Icetrix::Patch patch : patches)
+		for (Icetrix::Memory::Patch patch : patches)
 		{
 			features->Push(new Icetrix::Feature{ patch.name, false });
 		}
@@ -36,15 +35,15 @@ void Patches::OnUpdate(const Icetrix::LayerEvent::Update &update)
 	{
 		auto mainModule = process->modules().GetMainModule();
 
-		for (Icetrix::Patch patch : patches)
+		for (Icetrix::Memory::Patch patch : patches)
 		{
 			if (features->Get(patch.name)->enabled)
 			{
-				Icetrix::BytePatch::Patch(patch, mainModule->baseAddress);
+				Icetrix::Memory::BytePatch::Patch(patch, mainModule->baseAddress);
 			}
 			else
 			{
-				Icetrix::BytePatch::Unpatch(patch, mainModule->baseAddress);
+				Icetrix::Memory::BytePatch::Unpatch(patch, mainModule->baseAddress);
 			}
 		}
 	}
@@ -68,9 +67,9 @@ void Patches::OnDetach(const Icetrix::LayerEvent::Detach &detach)
 	{
 		auto mainModule = process->modules().GetMainModule();
 
-		for (Icetrix::Patch patch : patches)
+		for (Icetrix::Memory::Patch patch : patches)
 		{
-			Icetrix::BytePatch::Unpatch(patch, mainModule->baseAddress);
+			Icetrix::Memory::BytePatch::Unpatch(patch, mainModule->baseAddress);
 		}
 	}
 	else

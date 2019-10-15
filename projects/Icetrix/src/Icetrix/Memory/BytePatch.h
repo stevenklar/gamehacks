@@ -4,7 +4,7 @@
 
 #define MAX_PATCH 12
 
-namespace Icetrix
+namespace Icetrix::Memory
 {
     struct Patch
     {

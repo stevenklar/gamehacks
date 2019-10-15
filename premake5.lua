@@ -166,3 +166,16 @@ project "AgeOfWonders3"
         "vendor/imgui/examples/imgui_impl_win32.*",
         "vendor/imgui/examples/imgui_impl_dx11.*",
     }
+
+project "DoorKickers"
+    -- 32bit
+    kind "SharedLib"
+    characterset "MBCS"
+
+    includeProject()
+    includeIcetrix()
+
+    files {
+        "vendor/imgui/examples/imgui_impl_win32.*",
+        "vendor/imgui/examples/imgui_impl_opengl2.*",
+    }

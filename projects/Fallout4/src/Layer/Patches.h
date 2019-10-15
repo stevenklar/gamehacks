@@ -3,7 +3,7 @@
 #include "Icetrix/Layer.h"
 #include "Icetrix/BytePatch.h"
 
-using Icetrix::Patch;
+using Icetrix::Memory::Patch;
 
 class Patches
 {

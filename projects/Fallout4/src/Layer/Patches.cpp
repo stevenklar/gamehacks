@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "BlackBone/LocalHook/LocalHook.hpp"
 #include "Patches.h"
 
 void Patches::OnAttach(const Icetrix::LayerEvent::Attach &attach)
@@ -11,7 +10,7 @@ void Patches::OnAttach(const Icetrix::LayerEvent::Attach &attach)
 	{
 		auto mainModule = process->modules().GetMainModule();
 
-		for (Icetrix::Patch patch : patches)
+		for (Icetrix::Memory::Patch patch : patches)
 		{
 			features->Push(new Icetrix::Feature{ patch.name, false });
 		}
@@ -31,7 +30,7 @@ void Patches::OnUpdate(const Icetrix::LayerEvent::Update &update)
 	{
 		auto mainModule = process->modules().GetMainModule();
 
-		for (Icetrix::Patch patch : patches)
+		for (Icetrix::Memory::Patch patch : patches)
 		{
 			if (features->Get(patch.name)->enabled)
 			{
@@ -57,7 +56,7 @@ void Patches::OnDetach(const Icetrix::LayerEvent::Detach &detach)
 	{
 		auto mainModule = process->modules().GetMainModule();
 
-		for (Icetrix::Patch patch : patches)
+		for (Icetrix::Memory::Patch patch : patches)
 		{
 			Icetrix::BytePatch::Unpatch(patch, mainModule->baseAddress);
 		}

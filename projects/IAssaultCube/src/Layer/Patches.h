@@ -6,10 +6,10 @@
 #include <Psapi.h>
 #include <iostream>
 #include "Icetrix/Layer.h"
-#include "Icetrix/BytePatch.h"
+#include "Icetrix/Memory/BytePatch.h"
 #include "BlackBone/Include/Types.h"
 
-using Icetrix::Patch;
+using Icetrix::Memory::Patch;
 
 class Patches
 {

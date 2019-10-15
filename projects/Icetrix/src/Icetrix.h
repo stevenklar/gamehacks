@@ -7,6 +7,8 @@
 #include "Icetrix/Layer.h"
 #include "Icetrix/Feature.h"
 
+#define LAYER(x); std::make_shared<x>(this);
+
 namespace Icetrix
 {
 	Application* CreateApplication();

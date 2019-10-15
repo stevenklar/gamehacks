@@ -7,9 +7,8 @@ class App : public Icetrix::Application
 public:
 	App()
 	{
-		LAYER(Icetrix::Layer::PanicKey);
-		LAYER(Visuals);
-		LAYER(Patches);
+		new Icetrix::Layer::PanicKey(this);
+		new Visuals(this);
 	}
 };
 
