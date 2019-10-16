@@ -7,23 +7,24 @@ end
 function includeDirectX()
     includedirs(DIRECTX_DIR .. "Include")
 
-    filter { "configurations:Debug", "platforms:x86" }
+    filter { "configurations:Debug", "platforms:Win32" }
         libdirs(DIRECTX_DIR .. "%{dxDir}Lib/x86")
-    filter { "configurations:Debug", "platforms:x64" }
+    filter { "configurations:Debug", "platforms:Win64" }
         libdirs(DIRECTX_DIR .. "%{dxDir}Lib/x64")
+    filter {}
 end
 
 function includeBlackbone()
     includedirs(VENDOR_DIR .. "Blackbone/src")
 
-    filter { "configurations:Debug", "platforms:x86" }
+    filter { "configurations:Debug", "platforms:Win32" }
         libdirs(VENDOR_DIR .. "Blackbone/build/Win32/Debug")
-    filter { "configurations:Debug", "platforms:x64" }
+    filter { "configurations:Debug", "platforms:Win64" }
         libdirs(VENDOR_DIR .. "Blackbone/build/x64/Debug")
 
-    filter { "configurations:Release", "platforms:x86" }
+    filter { "configurations:Release", "platforms:Win32" }
         libdirs(VENDOR_DIR .. "Blackbone/build/Win32/Release")
-    filter { "configurations:Release", "platforms:x64" }
+    filter { "configurations:Release", "platforms:Win64" }
         libdirs(VENDOR_DIR .. "Blackbone/build/x64/Release")
 
     filter {}
@@ -35,9 +36,9 @@ function includeLegacySdl()
     includedirs(VENDOR_DIR .. "sdl_1.2/include")
     links "SDL"
 
-    filter { "platforms:x86" }
+    filter { "platforms:Win32" }
         libdirs(VENDOR_DIR .. "sdl_1.2/lib/x86")
-    filter { "platforms:x64" }
+    filter { "platforms:Win64" }
         libdirs(VENDOR_DIR .. "sdl_1.2/lib/x64")
     filter {}
 end

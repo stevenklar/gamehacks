@@ -34,11 +34,11 @@ void Patches::OnUpdate(const Icetrix::LayerEvent::Update &update)
 		{
 			if (features->Get(patch.name)->enabled)
 			{
-				Icetrix::BytePatch::Patch(patch, mainModule->baseAddress);
+				Icetrix::Memory::BytePatch::Patch(patch, mainModule->baseAddress);
 			}
 			else
 			{
-				Icetrix::BytePatch::Unpatch(patch, mainModule->baseAddress);
+				Icetrix::Memory::BytePatch::Unpatch(patch, mainModule->baseAddress);
 			}
 		}
 	}
@@ -58,7 +58,7 @@ void Patches::OnDetach(const Icetrix::LayerEvent::Detach &detach)
 
 		for (Icetrix::Memory::Patch patch : patches)
 		{
-			Icetrix::BytePatch::Unpatch(patch, mainModule->baseAddress);
+			Icetrix::Memory::BytePatch::Unpatch(patch, mainModule->baseAddress);
 		}
 	}
 	else

@@ -18,7 +18,7 @@ namespace Icetrix::Memory
     class BytePatch
     {
     public:
-        static void Patch(Icetrix::Patch patch, uint64_t baseAddress = 0);
-        static void Unpatch(Icetrix::Patch patch, uint64_t baseAddress = 0);
+        static void Patch(Icetrix::Memory::Patch patch, uint64_t baseAddress = 0);
+        static void Unpatch(Icetrix::Memory::Patch patch, uint64_t baseAddress = 0);
     };
 }

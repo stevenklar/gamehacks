@@ -1,6 +1,6 @@
 #include "BytePatch.h"
 
-void Icetrix::Memory::BytePatch::Patch(Icetrix::Patch patch, uint64_t baseAddress)
+void Icetrix::Memory::BytePatch::Patch(Icetrix::Memory::Patch patch, uint64_t baseAddress)
 {
 	blackbone::ProcessMemory* memory = &(Icetrix::Process::GetInstance())->memory();
 
@@ -14,7 +14,7 @@ void Icetrix::Memory::BytePatch::Patch(Icetrix::Patch patch, uint64_t baseAddres
 	}
 }
 
-void Icetrix::Memory::BytePatch::Unpatch(Icetrix::Patch patch, uint64_t baseAddress)
+void Icetrix::Memory::BytePatch::Unpatch(Icetrix::Memory::Patch patch, uint64_t baseAddress)
 {
 	blackbone::ProcessMemory* memory = &(Icetrix::Process::GetInstance())->memory();
 

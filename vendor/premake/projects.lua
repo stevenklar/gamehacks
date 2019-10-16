@@ -58,7 +58,7 @@ project "DoorKickers"
 
     files {
         VENDOR_DIR .. "imgui/examples/imgui_impl_win32.*",
-        VENDOR_DIR .. "imgui/examples/imgui_impl_opengl2.*",
+        --VENDOR_DIR .. "imgui/examples/imgui_impl_opengl2.*",
     }
 
 --[[ Test externalproject

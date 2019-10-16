@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Icetrix/Layer.h"
-#include "Icetrix/BytePatch.h"
+#include "Icetrix/Memory/BytePatch.h"
 
 using Icetrix::Memory::Patch;
 

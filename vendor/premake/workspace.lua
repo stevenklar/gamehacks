@@ -7,7 +7,7 @@ workspace "GameHacks"
     cppdialect "C++latest"
 
     configurations { "Debug", "Release" }
-    platforms      { "x86", "x64" }
+    platforms      { "Win32", "Win64" }
 
     defines {
         "_CRT_SECURE_NO_WARNINGS",
@@ -19,7 +19,7 @@ workspace "GameHacks"
         "MultiProcessorCompile",    -- Enable Visual Studio to use multiple compiler processes when building.
     }
 
-    filter "platforms:x86"
+    filter "platforms:Win32"
         architecture "x86"
         defines "IX_WIN32"
 
