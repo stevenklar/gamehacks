@@ -15,7 +15,9 @@ workspace "GameHacks"
         "NOMINMAX",
     }
 
-    flags "MultiProcessorCompile"
+    flags {
+        "MultiProcessorCompile",    -- Enable Visual Studio to use multiple compiler processes when building.
+    }
 
     filter "platforms:x86"
         architecture "x86"
@@ -28,10 +30,11 @@ workspace "GameHacks"
     filter "configurations:Debug"
         staticruntime "On"
         symbols "On"
+        optimize "Off"
 
     filter "configurations:Release"
         staticruntime "On"
         symbols "Off"
-        optimize "On"
+        optimize "Full"
 
     filter {}

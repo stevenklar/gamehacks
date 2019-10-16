@@ -21,8 +21,8 @@ project "IAssaultCube"
     includeLegacySdl()
 
     files {
-        "vendor/imgui/examples/imgui_impl_win32.*",
-        "vendor/imgui/examples/imgui_impl_opengl2.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_win32.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_opengl2.*",
     }
 
 project "Fallout4"
@@ -33,8 +33,8 @@ project "Fallout4"
     includeIcetrix()
 
     files {
-        "vendor/imgui/examples/imgui_impl_win32.*",
-        "vendor/imgui/examples/imgui_impl_dx11.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_win32.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_dx11.*",
     }
 
 project "AgeOfWonders3"
@@ -45,8 +45,8 @@ project "AgeOfWonders3"
     includeIcetrix()
 
     files {
-        "vendor/imgui/examples/imgui_impl_win32.*",
-        "vendor/imgui/examples/imgui_impl_dx11.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_win32.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_dx11.*",
     }
 
 project "DoorKickers"
@@ -57,6 +57,6 @@ project "DoorKickers"
     includeIcetrix()
 
     files {
-        "vendor/imgui/examples/imgui_impl_win32.*",
-        "vendor/imgui/examples/imgui_impl_opengl2.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_win32.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_opengl2.*",
     }
