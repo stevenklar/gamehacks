@@ -36,7 +36,7 @@ bool IsVisible(Vec3 vFrom, Vec3 vTo)
 #endif
 }
 
-void EngineDrawString(char* pText, float x, float y, float r, float g, float b, int pUnknown, int pUnknown2)
+void EngineDrawString(char* pText, int x, int y, int r, int g, int b, int pUnknown, int pUnknown2)
 {
 #ifdef IX_WIN32
 	__asm
