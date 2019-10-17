@@ -146,8 +146,8 @@ LRESULT CALLBACK Visuals::hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	POINT mPos;
 	GetCursorPos(&mPos);
 	ScreenToClient(hWnd, &mPos);
-	ImGui::GetIO().MousePos.x = mPos.x;
-	ImGui::GetIO().MousePos.y = mPos.y;
+	ImGui::GetIO().MousePos.x = static_cast<float>(mPos.x);
+	ImGui::GetIO().MousePos.y = static_cast<float>(mPos.y);
 
 	if (uMsg == WM_KEYUP)
 	{
