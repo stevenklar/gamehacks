@@ -7,8 +7,6 @@
 #include "BlackBone/LocalHook/LocalHook.hpp"
 #include "Game/Game.h"
 #include "SDL.h"
-#include "Hook/WglSwapBuffers.h"
-#include "Hook/SdlPollEvent.h"
 
 namespace App
 {
@@ -21,15 +19,15 @@ namespace App
 		{
 			app.dispatcher.sink<Icetrix::LayerEvent::Attach>().connect<&Menu::Create>(*this);
 			app.dispatcher.sink<Icetrix::LayerEvent::Shutdown>().connect<&Menu::Shutdown>(*this);
-			app.dispatcher.sink<Hook::WglSwapBufferEvent::Initialize>().connect<&Menu::Init>(*this);
-			app.dispatcher.sink<Hook::WglSwapBufferEvent::Update>().connect<&Menu::Render>(*this);
-			app.dispatcher.sink<Hook::PollEvent::Update>().connect<&Menu::PollEvent>(*this);
+			app.dispatcher.sink<Icetrix::Hook::WglSwapBufferEvent::Initialize>().connect<&Menu::Init>(*this);
+			app.dispatcher.sink<Icetrix::Hook::WglSwapBufferEvent::Update>().connect<&Menu::Render>(*this);
+			app.dispatcher.sink<Icetrix::Hook::PollEvent::Update>().connect<&Menu::PollEvent>(*this);
 		}
 
 		void Create();
 		void Init();
 		void Render();
-		void PollEvent(const Hook::PollEvent::Update &update);
+		void PollEvent(const Icetrix::Hook::PollEvent::Update &update);
 		void Shutdown();
 	};
 }

@@ -1,10 +1,10 @@
 #pragma once
-#include "pch.h"
-#include "BlackBone/LocalHook/LocalHook.hpp"
+#include <BlackBone/LocalHook/LocalHook.hpp>
+#include <gl\GL.h>
 
 typedef void(__stdcall* f_glBindTexture) (GLenum target, GLuint texture);
 
-namespace Hook
+namespace Icetrix::Hook
 {
 	namespace GlBindTextureEvent
 	{

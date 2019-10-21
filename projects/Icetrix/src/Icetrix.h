@@ -8,11 +8,10 @@
 #include "Icetrix/Feature.h"
 #include "Icetrix/Menu/ImGuiDesign.h"
 
-#define LAYER(x) new x()
-
-#define DUMP_OFFSET(x) std::cout << x << std::hex << &x << std::endl
-#define LOG_INFO(x) std::cout << "[+] " << x << std::endl
-#define LOG_ERROR(x) std::cout << "[!] " << x << std::endl
+#include "Icetrix/Layer/PanicKey.h"
+#include "Icetrix/Hook/GlBindTexture.h"
+#include "Icetrix/Hook/SdlPollEvent.h"
+#include "Icetrix/Hook/WglSwapBuffers.h"
 
 namespace Icetrix
 {

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GlBindTexture.h"
 
-void Hook::GlBindTexture::Hook(const Icetrix::LayerEvent::Attach& attach)
+void Icetrix::Hook::GlBindTexture::Hook(const Icetrix::LayerEvent::Attach& attach)
 {
 	HMODULE hModule = GetModuleHandle("opengl32.dll");
 
@@ -20,7 +20,7 @@ void Hook::GlBindTexture::Hook(const Icetrix::LayerEvent::Attach& attach)
 		LOG_ERROR("Failed to Hook: glBindTexture");
 }
 
-void Hook::GlBindTexture::Unhook(const Icetrix::LayerEvent::Detach& detach)
+void Icetrix::Hook::GlBindTexture::Unhook(const Icetrix::LayerEvent::Detach& detach)
 {
 	if (d_glBindTexture.Restore())
 		LOG_INFO("Restored 'glBindTexture'");
@@ -28,7 +28,7 @@ void Hook::GlBindTexture::Unhook(const Icetrix::LayerEvent::Detach& detach)
 		LOG_ERROR("Failed to restore glBindTexture");
 }
 
-void __stdcall Hook::GlBindTexture::h_glBindTexture(GLenum& target, GLuint& texture)
+void __stdcall Icetrix::Hook::GlBindTexture::h_glBindTexture(GLenum& target, GLuint& texture)
 {
 	auto& app = Icetrix::Application::GetInstance();
 	static bool initialized = false;

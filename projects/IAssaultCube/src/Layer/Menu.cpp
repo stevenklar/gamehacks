@@ -80,7 +80,7 @@ void App::Menu::Render()
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 }
 
-void App::Menu::PollEvent(const Hook::PollEvent::Update& update)
+void App::Menu::PollEvent(const Icetrix::Hook::PollEvent::Update& update)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	auto event = update.event;

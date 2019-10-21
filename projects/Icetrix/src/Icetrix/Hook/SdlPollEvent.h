@@ -1,10 +1,10 @@
 #pragma once
-#include "pch.h"
-#include "BlackBone/LocalHook/LocalHook.hpp"
+#include <BlackBone/LocalHook/LocalHook.hpp>
+#include <SDL.h>
 
 typedef void(__cdecl* f_pollEvent)(SDL_Event* e);
 
-namespace Hook
+namespace Icetrix::Hook
 {
 	namespace PollEvent
 	{

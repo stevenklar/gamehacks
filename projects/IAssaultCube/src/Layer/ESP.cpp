@@ -14,7 +14,7 @@ void App::ESP::Register()
 	features->Push(new Icetrix::Feature{ "ESP", false });
 }
 
-void App::ESP::Render(const Hook::WglSwapBufferEvent::Update& update)
+void App::ESP::Render()
 {
 	auto features = Icetrix::Features::GetInstance();
 	SetupOrtho();

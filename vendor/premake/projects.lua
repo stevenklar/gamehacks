@@ -10,6 +10,7 @@ project "Icetrix"
     includeBlackbone()
     includeImGui()
     includeEntt()
+    includeLegacySdl()
 
 -- Projects
 project "IAssaultCube"
@@ -18,7 +19,6 @@ project "IAssaultCube"
 
     includeProject()
     includeIcetrix()
-    includeLegacySdl()
 
     files {
         VENDOR_DIR .. "imgui/examples/imgui_impl_win32.*",

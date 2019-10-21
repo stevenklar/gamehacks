@@ -16,12 +16,6 @@
 #include "Icetrix.h"
 #include "Icetrix/Platform/OpenGL/OpenGL.h"
 #include "Game/Game.h"
-#include "SDL.h"
-
-// Hook Layers
-#include "Layer/Hook/GlBindTexture.h"
-#include "Layer/Hook/SdlPollEvent.h"
-#include "Layer/Hook/WglSwapBuffers.h"
 
 // Application Layers
 #include "Layer/Menu.h"

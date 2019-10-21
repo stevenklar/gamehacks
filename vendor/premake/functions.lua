@@ -65,6 +65,7 @@ function includeIcetrix()
     includeBlackbone()
     includeImGui()
     includeEntt()
+    includeLegacySdl()
 
     includedirs(PROJECTS_DIR .. "Icetrix/src")
     links "Icetrix"

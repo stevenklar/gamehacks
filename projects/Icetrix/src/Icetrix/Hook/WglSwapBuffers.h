@@ -1,10 +1,9 @@
 #pragma once
-#include "pch.h"
-#include "BlackBone/LocalHook/LocalHook.hpp"
+#include <BlackBone/LocalHook/LocalHook.hpp>
 
 typedef void(__stdcall* f_wglSwapBuffers)(HDC h);
 
-namespace Hook
+namespace Icetrix::Hook
 {
 	namespace WglSwapBufferEvent
 	{

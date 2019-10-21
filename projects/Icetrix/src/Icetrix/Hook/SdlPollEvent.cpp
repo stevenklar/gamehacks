@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SdlPollEvent.h"
 
-void Hook::SdlPollEvent::Hook(const Icetrix::LayerEvent::Attach& attach)
+void Icetrix::Hook::SdlPollEvent::Hook(const Icetrix::LayerEvent::Attach& attach)
 {
 	HMODULE hSdlModule = GetModuleHandle("sdl.dll");
 
@@ -20,7 +20,7 @@ void Hook::SdlPollEvent::Hook(const Icetrix::LayerEvent::Attach& attach)
 		LOG_ERROR("Failed to Hook: SDL_PollEvent");
 }
 
-void Hook::SdlPollEvent::Unhook(const Icetrix::LayerEvent::Detach& detach)
+void Icetrix::Hook::SdlPollEvent::Unhook(const Icetrix::LayerEvent::Detach& detach)
 {
 	if (d_pollEvent.Restore())
 		LOG_INFO("Restored 'pollEvent'");
@@ -28,7 +28,7 @@ void Hook::SdlPollEvent::Unhook(const Icetrix::LayerEvent::Detach& detach)
 		LOG_ERROR("Failed to restore pollEvent");
 }
 
-void __cdecl Hook::SdlPollEvent::h_pollEvent(SDL_Event*& event)
+void __cdecl Icetrix::Hook::SdlPollEvent::h_pollEvent(SDL_Event*& event)
 {
 	auto& app = Icetrix::Application::GetInstance();
 	app.dispatcher.trigger<PollEvent::Update>(event);

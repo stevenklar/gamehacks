@@ -25,9 +25,9 @@ namespace App
 			app.dispatcher.sink<Icetrix::LayerEvent::Detach>().connect<&Patches::OnDetach>(*this);
 		}
 
-		void OnAttach(const Icetrix::LayerEvent::Attach &attach);
-		void OnUpdate(const Icetrix::LayerEvent::Update &update);
-		void OnDetach(const Icetrix::LayerEvent::Detach &detach);
+		void OnAttach();
+		void OnUpdate();
+		void OnDetach();
 	private:
 		std::vector<Patch>(patches) = {
 			Patch{ "All weapons automatic",			0x63716, { 0x75, 0x09 }, { 0xEB, 0x09 }, 2 },

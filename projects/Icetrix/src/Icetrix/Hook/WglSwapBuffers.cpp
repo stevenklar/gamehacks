@@ -1,8 +1,7 @@
 #include "pch.h"
 #include "WglSwapBuffers.h"
-#include "Icetrix/Application.cpp"
 
-void Hook::WglSwapBuffers::Hook(const Icetrix::LayerEvent::Attach& attach)
+void Icetrix::Hook::WglSwapBuffers::Hook(const Icetrix::LayerEvent::Attach& attach)
 {
 	HMODULE hOpenglModule = GetModuleHandle("opengl32.dll");
 
@@ -27,7 +26,7 @@ void Hook::WglSwapBuffers::Hook(const Icetrix::LayerEvent::Attach& attach)
 	}
 }
 
-void Hook::WglSwapBuffers::Unhook(const Icetrix::LayerEvent::Detach& detach)
+void Icetrix::Hook::WglSwapBuffers::Unhook(const Icetrix::LayerEvent::Detach& detach)
 {
 	if (d_wglSwapBuffers.Restore())
 		LOG_INFO("Restored 'wglSwapBuffers'");
@@ -35,7 +34,7 @@ void Hook::WglSwapBuffers::Unhook(const Icetrix::LayerEvent::Detach& detach)
 		LOG_ERROR("Failed to restore wglSwapBuffers");
 }
 
-void __stdcall Hook::WglSwapBuffers::h_wglSwapBuffers(HDC& h)
+void __stdcall Icetrix::Hook::WglSwapBuffers::h_wglSwapBuffers(HDC& h)
 {
 	auto& app = Icetrix::Application::GetInstance();
 	static bool initialized = false;

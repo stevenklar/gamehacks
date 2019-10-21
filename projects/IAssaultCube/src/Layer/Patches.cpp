@@ -4,7 +4,7 @@
 #include "Patches.h"
 #include "Icetrix/Feature.h"
 
-void App::Patches::OnAttach(const Icetrix::LayerEvent::Attach &attach)
+void App::Patches::OnAttach()
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 	Icetrix::Features* features = Icetrix::Features::GetInstance();
@@ -26,7 +26,7 @@ void App::Patches::OnAttach(const Icetrix::LayerEvent::Attach &attach)
 	features->Push(new Icetrix::Feature{ "Pseudo Unlimited Health", false });
 }
 
-void App::Patches::OnUpdate(const Icetrix::LayerEvent::Update &update)
+void App::Patches::OnUpdate()
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 	Icetrix::Features* features = Icetrix::Features::GetInstance();
@@ -59,7 +59,7 @@ void App::Patches::OnUpdate(const Icetrix::LayerEvent::Update &update)
 	}
 }
 
-void App::Patches::OnDetach(const Icetrix::LayerEvent::Detach &detach)
+void App::Patches::OnDetach()
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 
