@@ -1,10 +1,11 @@
 #include "pch.h"
 #include "Patches.h"
+#include "Game.h"
 
 void Patches::OnAttach()
 {
-	blackbone::Process* process = Icetrix::Process::GetInstance();
-	Icetrix::Features* features = Icetrix::Features::GetInstance();
+	auto* process = Icetrix::Process::GetInstance();
+	auto* features = Icetrix::Features::GetInstance();
 
 	if (process->valid())
 	{
@@ -23,14 +24,14 @@ void Patches::OnAttach()
 
 void Patches::OnUpdate()
 {
-	blackbone::Process* process = Icetrix::Process::GetInstance();
-	Icetrix::Features* features = Icetrix::Features::GetInstance();
+	auto* process = Icetrix::Process::GetInstance();
+	auto* features = Icetrix::Features::GetInstance();
 
 	if (process->valid())
 	{
 		auto mainModule = process->modules().GetMainModule();
 
-		for (Icetrix::Memory::Patch patch : patches)
+		for (auto patch : patches)
 		{
 			if (features->Get(patch.name)->enabled)
 			{
@@ -46,11 +47,15 @@ void Patches::OnUpdate()
 	{
 		std::cout << "[!] Update Patches: No valid process found";
 	}
+
+	Actor* actor = *reinterpret_cast<Actor**>(process->modules().GetMainModule()->baseAddress + 0x59D6FA0);
+	actor->pActorValueInfo.m_HP = 0.0;
+	//actor->pActor->pActorValueInfo->m_HP = 0;
 }
 
 void Patches::OnDetach()
 {
-	blackbone::Process* process = Icetrix::Process::GetInstance();
+	auto* process = Icetrix::Process::GetInstance();
 
 	if (process->valid())
 	{

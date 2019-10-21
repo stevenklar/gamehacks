@@ -12,6 +12,7 @@
 #include "Icetrix/Hook/GlBindTexture.h"
 #include "Icetrix/Hook/SdlPollEvent.h"
 #include "Icetrix/Hook/WglSwapBuffers.h"
+#include "Icetrix/Hook/DxgiSwapChainPresent.h"
 
 namespace Icetrix
 {
