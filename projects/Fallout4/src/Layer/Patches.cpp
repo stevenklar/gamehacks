@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Patches.h"
 
-void Patches::OnAttach(const Icetrix::LayerEvent::Attach &attach)
+void Patches::OnAttach()
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 	Icetrix::Features* features = Icetrix::Features::GetInstance();
@@ -21,7 +21,7 @@ void Patches::OnAttach(const Icetrix::LayerEvent::Attach &attach)
 	}
 }
 
-void Patches::OnUpdate(const Icetrix::LayerEvent::Update &update)
+void Patches::OnUpdate()
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 	Icetrix::Features* features = Icetrix::Features::GetInstance();
@@ -48,7 +48,7 @@ void Patches::OnUpdate(const Icetrix::LayerEvent::Update &update)
 	}
 }
 
-void Patches::OnDetach(const Icetrix::LayerEvent::Detach &detach)
+void Patches::OnDetach()
 {
 	blackbone::Process* process = Icetrix::Process::GetInstance();
 

@@ -8,14 +8,21 @@ namespace Icetrix
 {
     class Application
     {
-	private:
-		bool panic = false;
 	public:
 		entt::dispatcher dispatcher{};
 	public:
+		static Application& GetInstance()
+		{
+			static Application app;
+			return app;
+		}
+
         void Run();
 		void Panic();
+	private:
+		bool panic = false;
+		Application() {};
+	public:
+		Application(Application const&) = delete;
     };
-
-	Icetrix::Application* CreateApplication();
 }

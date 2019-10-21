@@ -14,7 +14,17 @@
 
 // Custom Header Files
 #include "Icetrix.h"
+#include "Icetrix/Platform/OpenGL/OpenGL.h"
+#include "Game/Game.h"
+#include "SDL.h"
+
+// Hook Layers
+#include "Layer/Hook/GlBindTexture.h"
+#include "Layer/Hook/SdlPollEvent.h"
+#include "Layer/Hook/WglSwapBuffers.h"
 
 // Application Layers
-#include "Layer/Visuals.h"
+#include "Layer/Menu.h"
+#include "Layer/ESP.h"
 #include "Layer/Patches.h"
+#include "Layer/PaperWalls.h"

@@ -10,15 +10,16 @@ class Visuals
 {
 private:
 	blackbone::Detour<f_Present> d_Present;
+	Icetrix::Application& app;
 public:
-	Visuals(Icetrix::Application* app)
+	Visuals() : app(Icetrix::Application::GetInstance())
 	{
-		app->dispatcher.sink<Icetrix::LayerEvent::Attach>().connect<&Visuals::OnAttach>(*this);
-		app->dispatcher.sink<Icetrix::LayerEvent::Detach>().connect<&Visuals::OnDetach>(*this);
+		app.dispatcher.sink<Icetrix::LayerEvent::Attach>().connect<&Visuals::OnAttach>(*this);
+		app.dispatcher.sink<Icetrix::LayerEvent::Detach>().connect<&Visuals::OnDetach>(*this);
 	}
 
-	void OnAttach(const Icetrix::LayerEvent::Attach &attach);
-	void OnDetach(const Icetrix::LayerEvent::Detach &detach);
+	void OnAttach();
+	void OnDetach();
 
 	static void __fastcall h_Present(IDXGISwapChain*& pChain, UINT& SyncInterval, UINT& Flags);
 	static LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

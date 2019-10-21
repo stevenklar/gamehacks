@@ -9,5 +9,6 @@ namespace Icetrix
 		struct Attach {};
 		struct Update {};
 		struct Detach {};
+		struct Shutdown {};
 	};
 }

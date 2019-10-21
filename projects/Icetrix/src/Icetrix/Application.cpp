@@ -18,6 +18,8 @@ void Icetrix::Application::Run()
 #ifdef _DEBUG
 	delete console;
 #endif
+
+	dispatcher.trigger<Icetrix::LayerEvent::Shutdown>();
 }
 
 void Icetrix::Application::Panic()

@@ -6,11 +6,15 @@
 #include "Icetrix/Process.h"
 #include "Icetrix/Layer.h"
 #include "Icetrix/Feature.h"
+#include "Icetrix/Menu/ImGuiDesign.h"
 
-//#define LAYER(x) std::make_shared<x>(this)
-#define LAYER(x) new x(this)
+#define LAYER(x) new x()
+
+#define DUMP_OFFSET(x) std::cout << x << std::hex << &x << std::endl
+#define LOG_INFO(x) std::cout << "[+] " << x << std::endl
+#define LOG_ERROR(x) std::cout << "[!] " << x << std::endl
 
 namespace Icetrix
 {
-	Application* CreateApplication();
+	Application& CreateApplication();
 }

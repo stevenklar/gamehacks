@@ -2,15 +2,13 @@
 #include "Icetrix/Entrypoint.h"
 #include "Icetrix/Layer/PanicKey.h"
 
-class App : public Icetrix::Application
+Icetrix::Application& Icetrix::CreateApplication()
 {
-public:
-	App()
-	{
-		LAYER(Icetrix::Layer::PanicKey);
-		LAYER(Visuals);
-		LAYER(Patches);
-	}
-};
+	auto& app = Icetrix::Application::GetInstance();
 
-Icetrix::Application* Icetrix::CreateApplication() { return new App(); }
+	LAYER(Icetrix::Layer::PanicKey);
+	LAYER(Patches);
+	LAYER(Visuals);
+
+	return app;
+}

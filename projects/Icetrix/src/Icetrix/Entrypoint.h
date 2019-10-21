@@ -3,12 +3,14 @@
 #include "pch.h"
 #include "Application.h"
 
+static Icetrix::Application* g_Application;
+
 DWORD WINAPI DllThread(LPVOID lpParameter)
 {
-    Icetrix::Application* app = Icetrix::CreateApplication(); 
-    app->Run();
-    delete app;
-    return 0;
+    auto& app = Icetrix::CreateApplication(); 
+	app.Run();
+
+	return 0;
 }
 
 BOOL WINAPI DllMain(_In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved)
@@ -17,8 +19,7 @@ BOOL WINAPI DllMain(_In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID l
     {
         CreateThread(0, 0, DllThread, 0, 0, 0);
     }
-
-    if (fdwReason == DLL_PROCESS_DETACH)
+	else if (fdwReason == DLL_PROCESS_DETACH)
     {
         FreeLibraryAndExitThread(hinstDLL, 0);
     }

@@ -4,34 +4,50 @@
 #include "imgui.h"
 #include "examples/imgui_impl_win32.h"
 #include "examples/imgui_impl_dx11.h"
+#include "Icetrix/Platform/DirectX/Helper.h"
 #include "d3d11.h"
-
 #pragma comment(lib, "d3d11.lib")
 
-static bool bShow = true;
+static bool bShow = false;
 LONG_PTR OriginalWndProc = NULL;
 WNDPROC WndProcHandler = NULL;
 HWND hwnd = NULL;
 IMGUI_IMPL_API LRESULT  ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-void Visuals::OnAttach(const Icetrix::LayerEvent::Attach &attach)
+void Visuals::OnAttach()
 {
-	auto& modules = Icetrix::Process::GetInstance()->modules();	
+	auto& modules = Icetrix::Process::GetInstance()->modules();
+	/*
+	void* SwapChain[18];
 
-	// https://www.unknowncheats.me/wiki/IDA_Pro:Reverse_D3D11_Present_function_using_IDA_Pro
-	f_Present present = reinterpret_cast<f_Present>(modules.GetModule(L"dxgi.dll")->baseAddress + 0x4300); // IDXGISwapChainPresent
-	
-	if (d_Present.Hook(present, &Visuals::h_Present, blackbone::HookType::HWBP))
+	Sleep(3000);
+	__try
 	{
-		std::cout << "[+] Hooked 'Present'" << std::endl;
+		if (Icetrix::Platform::DirectX::GetD3D11SwapchainDeviceContext(SwapChain, sizeof(SwapChain), nullptr, 0, nullptr, 0))
+		{
+	*/
+			f_Present present = reinterpret_cast<f_Present>(modules.GetModule(L"dxgi.dll")->baseAddress + 0x4300); // IDXGISwapChainPresent
+			//f_Present present = reinterpret_cast<f_Present>(SwapChain[8]); // IDXGISwapChainPresent
+			
+			if (d_Present.Hook(present, &Visuals::h_Present, blackbone::HookType::HWBP))
+				LOG_INFO("Hooked 'Present'");
+			else
+				LOG_ERROR("[!] Failed to Hook: Present");
+	/*
+		}
+		else
+		{
+			LOG_ERROR("[!] Failed to find: SwapChain/Device/Context");
+		}
 	}
-	else
+	__finally
 	{
-		std::cout << "[!] Failed to Hook: Present" << std::endl;
+		LOG_ERROR("[!] Failed to find: SwapChain/Device/Context, exception thrown");
 	}
+	*/
 }
 
-void Visuals::OnDetach(const Icetrix::LayerEvent::Detach &detach)
+void Visuals::OnDetach()
 {
 	if (d_Present.Restore())
 	{
@@ -46,7 +62,7 @@ void Visuals::OnDetach(const Icetrix::LayerEvent::Detach &detach)
 
 	ImGui_ImplWin32_Shutdown();
 	ImGui_ImplDX11_Shutdown();
-	ImGui::DestroyContext();
+	//ImGui::DestroyContext();
 }
 
 void __fastcall Visuals::h_Present(IDXGISwapChain* &pChain, UINT &SyncInterval, UINT &Flags)
@@ -146,8 +162,8 @@ LRESULT CALLBACK Visuals::hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	POINT mPos;
 	GetCursorPos(&mPos);
 	ScreenToClient(hWnd, &mPos);
-	ImGui::GetIO().MousePos.x = static_cast<float>(mPos.x);
-	ImGui::GetIO().MousePos.y = static_cast<float>(mPos.y);
+	io.MousePos.x = static_cast<float>(mPos.x);
+	io.MousePos.y = static_cast<float>(mPos.y);
 
 	if (uMsg == WM_KEYUP)
 	{
@@ -160,9 +176,11 @@ LRESULT CALLBACK Visuals::hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	if (bShow)
 	{
 		ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+		io.MouseDrawCursor = true;
 		return true;
 	}
 
+	io.MouseDrawCursor = false;
 	return CallWindowProc(WndProcHandler, hWnd, uMsg, wParam, lParam);
 }
 

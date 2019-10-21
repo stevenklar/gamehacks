@@ -13,15 +13,16 @@ private:
 		Patch{ "Unlimited AP", 0xDC2D55, { 0xFF, 0x50, 0x30 }, { 0x90, 0x90, 0x90 }, 3 },
 		Patch{ "No Weight", 0xD87163, { 0xE8, 0xE8, 0x91, 0x67, 0xFF }, { 0x90, 0x90, 0x90, 0x90, 0x90 }, 5 },
 	};
+	Icetrix::Application& app;
 public:
-	void OnAttach(const Icetrix::LayerEvent::Attach &attach);
-	void OnUpdate(const Icetrix::LayerEvent::Update &update);
-	void OnDetach(const Icetrix::LayerEvent::Detach &detach);
-
-	Patches(Icetrix::Application* app)
+	Patches() : app(Icetrix::Application::GetInstance())
 	{
-		app->dispatcher.sink<Icetrix::LayerEvent::Attach>().connect<&Patches::OnAttach>(*this);
-		app->dispatcher.sink<Icetrix::LayerEvent::Update>().connect<&Patches::OnUpdate>(*this);
-		app->dispatcher.sink<Icetrix::LayerEvent::Detach>().connect<&Patches::OnDetach>(*this);
+		app.dispatcher.sink<Icetrix::LayerEvent::Attach>().connect<&Patches::OnAttach>(*this);
+		app.dispatcher.sink<Icetrix::LayerEvent::Update>().connect<&Patches::OnUpdate>(*this);
+		app.dispatcher.sink<Icetrix::LayerEvent::Detach>().connect<&Patches::OnDetach>(*this);
 	}
+
+	void OnAttach();
+	void OnUpdate();
+	void OnDetach();
 };
