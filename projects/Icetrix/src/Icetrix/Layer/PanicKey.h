@@ -16,7 +16,7 @@ namespace Icetrix::Layer
 
 		void OnUpdate(const Icetrix::LayerEvent::Update &update)
 		{
-			if (GetAsyncKeyState(VK_F9) & 1)
+			if (GetAsyncKeyState(VK_DELETE) & 1)
 				app.Panic();
 		}
 	};
