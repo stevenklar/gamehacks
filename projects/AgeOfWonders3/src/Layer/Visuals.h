@@ -21,7 +21,6 @@ public:
 	inline static WNDPROC WndProcHandler = NULL;
 	inline static HWND hwnd = NULL;
 public:
-public:
 	Visuals() : app(Icetrix::Application::GetInstance())
 	{
 		app.dispatcher.sink<Icetrix::LayerEvent::Attach>().connect<&Visuals::OnAttach>(*this);

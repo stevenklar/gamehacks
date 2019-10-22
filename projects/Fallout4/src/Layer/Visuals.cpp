@@ -8,15 +8,6 @@
 #include "d3d11.h"
 #pragma comment(lib, "d3d11.lib")
 
-static bool bShow = false;
-LONG_PTR OriginalWndProc = NULL;
-HWND hwnd = NULL;
-
-static ID3D11Device* g_pd3dDevice = NULL;
-ID3D11DeviceContext* g_pd3dDeviceContext = NULL;
-ID3D11RenderTargetView* ppRTView = NULL;
-WNDPROC WndProcHandler = NULL;
-
 void Visuals::InitializePresent(const Icetrix::Hook::PresentEvent::Initialize& init)
 {
 	auto pChain = init.pChain;
@@ -58,6 +49,7 @@ void Visuals::InitializePresent(const Icetrix::Hook::PresentEvent::Initialize& i
 }
 
 IMGUI_IMPL_API LRESULT  ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
 LRESULT CALLBACK Visuals::hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	ImGuiIO& io = ImGui::GetIO();
@@ -97,6 +89,9 @@ void __fastcall Visuals::Update()
 	{
 		if (ImGui::Begin("Icetrix vagreany unpx", &bShow, ImGuiWindowFlags_AlwaysAutoResize))
 		{
+			auto& io = ImGui::GetIO();
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
 			if (ImGui::Button("Activate"))
 			{
 				// TODO: Replace with Features class method

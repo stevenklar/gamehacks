@@ -47,10 +47,6 @@ void Patches::OnUpdate()
 	{
 		std::cout << "[!] Update Patches: No valid process found";
 	}
-
-	Actor* actor = *reinterpret_cast<Actor**>(process->modules().GetMainModule()->baseAddress + 0x59D6FA0);
-	actor->pActorValueInfo.m_HP = 0.0;
-	//actor->pActor->pActorValueInfo->m_HP = 0;
 }
 
 void Patches::OnDetach()

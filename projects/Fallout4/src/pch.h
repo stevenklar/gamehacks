@@ -20,3 +20,5 @@
 // Application Layers
 #include "Layer/Patches.h"
 #include "Layer/Visuals.h"
+#include "Layer/Godmode.h"
+#include "Layer/Weapon.h"

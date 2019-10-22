@@ -10,6 +10,8 @@ Icetrix::Application& Icetrix::CreateApplication()
 	LAYER(Icetrix::Hook::DxgiSwapChainPresent);
 	LAYER(Patches);
 	LAYER(Visuals);
+	LAYER(Godmode);
+	LAYER(Weapon);
 
 	return app;
 }
