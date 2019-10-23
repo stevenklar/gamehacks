@@ -20,9 +20,11 @@ namespace Icetrix::Hook
 	private:
 		Icetrix::Application& app;
 		blackbone::Detour<f_Present> d_Present;
+		DWORD presentOffset;
 	public:
-		DxgiSwapChainPresent() : app(Icetrix::Application::GetInstance())
+		DxgiSwapChainPresent(DWORD presentOffset) : app(Icetrix::Application::GetInstance())
 		{
+			this->presentOffset = presentOffset;
 			app.dispatcher.sink<Icetrix::LayerEvent::Attach>().connect<&DxgiSwapChainPresent::Hook>(*this);
 			app.dispatcher.sink<Icetrix::LayerEvent::Detach>().connect<&DxgiSwapChainPresent::Unhook>(*this);
 		}

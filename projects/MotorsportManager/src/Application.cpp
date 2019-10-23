@@ -6,12 +6,10 @@ Icetrix::Application& Icetrix::CreateApplication()
 {
 	auto& app = Icetrix::Application::GetInstance();
 
-	LAYER(Icetrix::Layer::PanicKey);
+	new Icetrix::Layer::PanicKey();
 	new Icetrix::Hook::DxgiSwapChainPresent(0x4300);
-	LAYER(Patches);
-	LAYER(Visuals);
-	LAYER(Godmode);
-	LAYER(Weapon);
+	new Visuals();
+	//new Patches();
 
 	return app;
 }

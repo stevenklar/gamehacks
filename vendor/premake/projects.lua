@@ -37,6 +37,31 @@ project "Fallout4"
         VENDOR_DIR .. "imgui/examples/imgui_impl_dx11.*",
     }
 
+project "Thief"
+    -- 64bit
+    kind "SharedLib"
+
+    includeProject()
+    includeIcetrix()
+
+    files {
+        VENDOR_DIR .. "imgui/examples/imgui_impl_win32.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_dx11.*",
+    }
+
+project "MotorsportManager"
+    -- 64bit
+    kind "SharedLib"
+
+    includeProject()
+    includeIcetrix()
+
+    files {
+        VENDOR_DIR .. "imgui/examples/imgui_impl_win32.*",
+        VENDOR_DIR .. "imgui/examples/imgui_impl_dx11.*",
+    }
+
+
 project "AgeOfWonders3"
     -- 32bit
     kind "SharedLib"

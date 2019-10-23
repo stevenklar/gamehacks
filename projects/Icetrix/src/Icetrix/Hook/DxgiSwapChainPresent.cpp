@@ -1,15 +1,17 @@
 #include "pch.h"
 #include "DxgiSwapChainPresent.h"
 #include "Icetrix/Process.h"
+#include "Icetrix/Platform/DirectX/Helper.h"
 
 void Icetrix::Hook::DxgiSwapChainPresent::Hook(const Icetrix::LayerEvent::Attach& attach)
 {
 	//void* SwapChain[18];
-	//if (Icetrix::Platform::DirectX::GetD3D11SwapchainDeviceContext(SwapChain, sizeof(SwapChain), nullptr, 0, nullptr, 0))
+	//Icetrix::Platform::DirectX::GetD3D11SwapchainDeviceContext(SwapChain, sizeof(SwapChain), nullptr, 0, nullptr, 0);
 	// SwapChain[8] => Present
 
 	auto& modules = Icetrix::Process::GetInstance()->modules();
-	f_Present present = reinterpret_cast<f_Present>(modules.GetModule(L"dxgi.dll")->baseAddress + 0x4300); // IDXGISwapChainPresent
+	f_Present present = reinterpret_cast<f_Present>(modules.GetModule(L"dxgi.dll")->baseAddress + presentOffset); // IDXGISwapChainPresent
+	//f_Present present = reinterpret_cast<f_Present>(SwapChain[8]); // IDXGISwapChainPresent
 	
 	if (d_Present.Hook(present, &Icetrix::Hook::DxgiSwapChainPresent::h_Present, blackbone::HookType::HWBP))
 		LOG_INFO("Hooked 'IDXGISwapChain::Present'");
