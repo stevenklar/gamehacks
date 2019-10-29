@@ -22,3 +22,4 @@
 #include "Layer/ESP.h"
 #include "Layer/Patches.h"
 #include "Layer/PaperWalls.h"
+#include "Layer/GetEntityHook.h"

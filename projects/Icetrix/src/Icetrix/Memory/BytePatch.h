@@ -2,17 +2,14 @@
 #include "pch.h"
 #include "Icetrix/Process.h"
 
-#define MAX_PATCH 12
-
 namespace Icetrix::Memory
 {
     struct Patch
     {
         char const* name;
         uint64_t address;
-        BYTE original[MAX_PATCH];
-        BYTE patch[MAX_PATCH];
-        int size;
+		std::vector<BYTE> original;
+		std::vector<BYTE> patch;
     };
 
     class BytePatch

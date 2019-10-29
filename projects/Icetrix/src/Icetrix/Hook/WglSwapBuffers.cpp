@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "WglSwapBuffers.h"
 
-void Icetrix::Hook::WglSwapBuffers::Hook(const Icetrix::LayerEvent::Attach& attach)
+void Icetrix::Hook::WglSwapBuffers::Hook()
 {
 	HMODULE hOpenglModule = GetModuleHandle("opengl32.dll");
 
@@ -26,7 +26,7 @@ void Icetrix::Hook::WglSwapBuffers::Hook(const Icetrix::LayerEvent::Attach& atta
 	}
 }
 
-void Icetrix::Hook::WglSwapBuffers::Unhook(const Icetrix::LayerEvent::Detach& detach)
+void Icetrix::Hook::WglSwapBuffers::Unhook()
 {
 	if (d_wglSwapBuffers.Restore())
 		LOG_INFO("Restored 'wglSwapBuffers'");

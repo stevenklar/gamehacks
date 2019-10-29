@@ -22,3 +22,4 @@
 #include "Layer/Visuals.h"
 #include "Layer/Godmode.h"
 #include "Layer/Weapon.h"
+#include "Layer/Watermark.h"

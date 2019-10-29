@@ -14,9 +14,8 @@ namespace Icetrix::Hook
 	class WglSwapBuffers
 	{
 	private:
-		blackbone::Detour<f_wglSwapBuffers> d_wglSwapBuffers;
-	private:
 		Icetrix::Application& app;
+		blackbone::Detour<f_wglSwapBuffers> d_wglSwapBuffers;
 	public:
 		WglSwapBuffers() : app(Icetrix::Application::GetInstance())
 		{
@@ -24,8 +23,8 @@ namespace Icetrix::Hook
 			app.dispatcher.sink<Icetrix::LayerEvent::Detach>().connect<&WglSwapBuffers::Unhook>(*this);
 		}
 
-		void Hook(const Icetrix::LayerEvent::Attach &attach);
-		void Unhook(const Icetrix::LayerEvent::Detach &detach);
+		void Hook();
+		void Unhook();
 
 		static void __stdcall h_wglSwapBuffers(HDC& h);
 	};

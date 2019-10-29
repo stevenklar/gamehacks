@@ -12,8 +12,9 @@ Icetrix::Application& Icetrix::CreateApplication()
 	LAYER(Icetrix::Hook::GlBindTexture);
 	LAYER(App::Menu);
 	LAYER(App::ESP);
-	LAYER(App::Patches);
+	//LAYER(App::Patches);
 	LAYER(App::PaperWalls);
+	LAYER(App::GetEntityHook);
 
 	return app;
 }

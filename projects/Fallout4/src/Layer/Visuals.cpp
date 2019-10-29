@@ -78,7 +78,7 @@ LRESULT CALLBACK Visuals::hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	return CallWindowProc(WndProcHandler, hWnd, uMsg, wParam, lParam);
 }
 
-void __fastcall Visuals::Update()
+void Visuals::Update()
 {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
@@ -90,7 +90,10 @@ void __fastcall Visuals::Update()
 		if (ImGui::Begin("Icetrix vagreany unpx", &bShow, ImGuiWindowFlags_AlwaysAutoResize))
 		{
 			auto& io = ImGui::GetIO();
+#ifdef DEBUG
 			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+			ImGui::Text("AmmoAddr: %X", entt::monostate<"ammoAddress"_hs>{});
+#endif
 
 			if (ImGui::Button("Activate"))
 			{
@@ -100,6 +103,7 @@ void __fastcall Visuals::Update()
 					feature->enabled = true;
 				}
 			}
+			ImGui::SameLine();
 
 			if (ImGui::Button("Deactivate"))
 			{
@@ -115,6 +119,8 @@ void __fastcall Visuals::Update()
 			}
 		}
 		ImGui::End();
+
+		//app.dispatcher.trigger(RenderMenu)
 	}
 
 	ImGui::EndFrame();

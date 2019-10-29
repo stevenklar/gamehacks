@@ -61,6 +61,14 @@ function includeEntt()
     files(VENDOR_DIR .. "entt/entt.hpp")
 end
 
+function includeFw1()
+    includedirs(VENDOR_DIR .. "fw1/FW1FontWrapper/Source")
+    files {
+        VENDOR_DIR .. "fw1/FW1FontWrapper/Source/*.h",
+        VENDOR_DIR .. "fw1/FW1FontWrapper/Source/*.cpp",
+    }
+end
+
 function includeIcetrix()
     includeBlackbone()
     includeImGui()

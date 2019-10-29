@@ -45,6 +45,20 @@ void App::Menu::Render()
 
 		if (ImGui::Begin("Icetrix vagreany unpx", &bShow, ImGuiWindowFlags_AlwaysAutoResize))
 		{
+#ifdef DEBUG
+			ImGuiIO &io = ImGui::GetIO();
+			ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+			// Proof of Concept :)
+			int ammoAddress = entt::monostate<"ammoAddress"_hs>{};
+			if (ammoAddress != 0)
+				ImGui::SliderInt("Ammo", (int*)ammoAddress, 0, 1337);
+
+			int grenadeAddress = entt::monostate<"grenadeAddress"_hs>{};
+			if (grenadeAddress != 0)
+				ImGui::SliderInt("Grenades", (int*)grenadeAddress, 0, 1337);
+#endif
+
 			if (ImGui::Button("Activate"))
 			{
 				// TODO: Replace with Features class method

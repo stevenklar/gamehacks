@@ -4,6 +4,7 @@
 #include "Icetrix/Layer.h"
 #include "Icetrix/Process.h"
 #include "Icetrix/Memory/BytePatch.h"
+#include "BlackBone/Patterns/PatternSearch.h"
 
 class Patches
 {
@@ -11,6 +12,8 @@ private:
 	Icetrix::Application& app;
 	blackbone::Process* process;
 	Icetrix::Features* features;
+
+	Icetrix::Memory::Patch* unlimitedItemsPatch = nullptr;
 public:
 	Patches() : app(Icetrix::Application::GetInstance()), process(Icetrix::Process::GetInstance()), features(Icetrix::Features::GetInstance())
 	{
@@ -26,29 +29,39 @@ public:
 
 		if (process->valid())
 		{
-			features->Push(new Icetrix::Feature{ "Unlimited Items", false });
-			//actor = *reinterpret_cast<Actor**>(process->modules().GetMainModule()->baseAddress + 0x59D6FA0);
+			{
+				blackbone::PatternSearch ps1("\x2B\xDF\x89\x19\x48\x8B\x06");
+				std::vector<blackbone::ptr_t> results;
+				auto mainModule = process->modules().GetMainModule();
+				ps1.Search((void*)mainModule->baseAddress, mainModule->size, results);
+
+				if (results.size() > 0)
+				{
+					unlimitedItemsPatch = new Icetrix::Memory::Patch{ "Unlimited Items", results.at(0), { 0x2B, 0xDF }, { 0x90, 0x90 } };
+					features->Push(new Icetrix::Feature{ "Unlimited Items", false });
+				}
+			}
 		}
     }
 
 	void OnUpdate()
     {
-		auto baseAddress = process->modules().GetMainModule()->baseAddress;
-
-		if (features->Get("Unlimited Items")->enabled)
+		if (features->Get("Unlimited Items")->enabled && unlimitedItemsPatch)
 		{
-			Icetrix::Memory::BytePatch::Patch(Icetrix::Memory::Patch{ "Unlimited Items", 0xE68C20, { 0x2B, 0xDF }, { 0x90, 0x90 }, 2 }, baseAddress);
+			Icetrix::Memory::BytePatch::Patch(*unlimitedItemsPatch, 0x0);
 		}
 		else
 		{
-			Icetrix::Memory::BytePatch::Unpatch(Icetrix::Memory::Patch{ "Unlimited Items", 0xE68C20, { 0x2B, 0xDF }, { 0x90, 0x90 }, 2 }, baseAddress);
+			Icetrix::Memory::BytePatch::Unpatch(*unlimitedItemsPatch, 0x0);
 		}
     }
 
 	void OnDetach()
 	{
-		auto baseAddress = process->modules().GetMainModule()->baseAddress;
-
-		Icetrix::Memory::BytePatch::Unpatch(Icetrix::Memory::Patch{ "Unlimited Items", 0xE68C20, { 0x2B, 0xDF }, { 0x90, 0x90 }, 2 }, baseAddress);
+		if (unlimitedItemsPatch)
+		{
+			Icetrix::Memory::BytePatch::Unpatch(*unlimitedItemsPatch, 0x0);
+			delete unlimitedItemsPatch;
+		}
 	}
 };

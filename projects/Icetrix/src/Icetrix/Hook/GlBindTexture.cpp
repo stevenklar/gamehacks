@@ -13,7 +13,7 @@ void Icetrix::Hook::GlBindTexture::Hook(const Icetrix::LayerEvent::Attach& attac
 
 	auto dglBindTexture = GetProcAddress(hModule, "glBindTexture");
 	f_glBindTexture glBindTexture = reinterpret_cast<f_glBindTexture>(dglBindTexture);
-
+ 
 	if (d_glBindTexture.Hook(glBindTexture, &GlBindTexture::h_glBindTexture, blackbone::HookType::HWBP))
 		LOG_INFO("Hooked 'glBindTexture'");
 	else

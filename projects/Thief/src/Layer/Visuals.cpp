@@ -78,7 +78,7 @@ LRESULT CALLBACK Visuals::hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	return CallWindowProc(WndProcHandler, hWnd, uMsg, wParam, lParam);
 }
 
-void __fastcall Visuals::Update()
+void Visuals::Update()
 {
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();

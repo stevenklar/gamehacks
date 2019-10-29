@@ -31,6 +31,7 @@ project "Fallout4"
 
     includeProject()
     includeIcetrix()
+    includeFw1();
 
     files {
         VENDOR_DIR .. "imgui/examples/imgui_impl_win32.*",

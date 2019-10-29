@@ -12,6 +12,7 @@ Icetrix::Application& Icetrix::CreateApplication()
 	LAYER(Visuals);
 	LAYER(Godmode);
 	LAYER(Weapon);
+	LAYER(Watermark);
 
 	return app;
 }
