@@ -59,12 +59,9 @@ LRESULT CALLBACK Visuals::hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
 	io.MousePos.x = static_cast<float>(mPos.x);
 	io.MousePos.y = static_cast<float>(mPos.y);
 
-	if (uMsg == WM_KEYUP)
+	if (uMsg == WM_KEYUP && wParam == VK_INSERT)
 	{
-		if (wParam == VK_INSERT)
-		{
-			bShow = !bShow;
-		}
+		bShow = !bShow;
 	}
 
 	if (bShow)
